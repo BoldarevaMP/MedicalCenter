@@ -1,0 +1,31 @@
+CREATE TABLE diagnosis (
+  id                  INT           NOT NULL PRIMARY KEY,
+  name                VARCHAR(255)  NOT NULL
+);
+
+CREATE TABLE doctors (
+  id                  INT           NOT NULL PRIMARY KEY,
+  firstName           VARCHAR(255)  NOT NULL,
+  lastName            VARCHAR(255)  NOT NULL
+);
+
+CREATE TABLE treatment (
+  id                  INT           NOT NULL PRIMARY KEY,
+  name                INT           NOT NULL,
+  type                VARCHAR(255)  NOT NULL,
+  dosageForm          SMALLINT      NOT NULL
+);
+
+CREATE TABLE patients (
+  id                 INT          NOT NULL PRIMARY KEY,
+  firstName          VARCHAR(255) NOT NULL,
+  lastName           VARCHAR(255) NOT NULL,
+  diagnosis          VARCHAR(255) NOT NULL,
+  healthInsurance    INTEGER      NOT NULL,
+  attendingPhysician VARCHAR(255) NOT NULL,
+  status             SMALLINT     NOT NULL,
+  doctor_id          INT          NOT NULL,
+  FOREIGN KEY (doctor_id) REFERENCES doctors (id),
+  diagnosis_id       INT          NOT NULL,
+  FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
+);

@@ -1,4 +1,4 @@
-package entity;
+package unicorn.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +19,7 @@ public class Diagnosis {
     @Column (name = "name")
     private String name;
 
+    @ManyToMany (mappedBy = "diagnosis")
+    private Patient patient;
 
 }

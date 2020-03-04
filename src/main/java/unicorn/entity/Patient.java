@@ -1,11 +1,13 @@
-package entity;
+package unicorn.entity;
 
+import unicorn.entity.enums.PatientStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @Entity
@@ -29,14 +31,22 @@ public class Patient {
     @Column(name ="healthinsurance")
     private Integer healthInsurance;
 
+    @Enumerated (EnumType.STRING)
+    @Column (name = "status")
+    private PatientStatus status;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "patients_diagnoses", joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "diagnosis_id"))
+    private List<Diagnosis> diagnosisList;
 
+    @OneToMany (mappedBy = "patient")
+    private List<Appointment> appointments;
 
-    //    private diagnosis
-//    private String AttendingPhisician;
-
-//    private enum status;
+    @OneToMany (mappedBy = "patient")
+    private List<Event> events;
 }

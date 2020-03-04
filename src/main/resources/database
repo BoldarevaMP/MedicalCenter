@@ -1,31 +1,62 @@
 CREATE TABLE diagnosis (
   id                  INT           NOT NULL PRIMARY KEY,
-  name                VARCHAR(255)  NOT NULL
+  name                VARCHAR(100)  NOT NULL
 );
 
 CREATE TABLE doctors (
   id                  INT           NOT NULL PRIMARY KEY,
-  firstName           VARCHAR(255)  NOT NULL,
-  lastName            VARCHAR(255)  NOT NULL
+  firstName           VARCHAR(30)   NOT NULL,
+  lastName            VARCHAR(30)   NOT NULL
 );
 
 CREATE TABLE treatment (
   id                  INT           NOT NULL PRIMARY KEY,
   name                INT           NOT NULL,
-  type                VARCHAR(255)  NOT NULL,
-  dosageForm          SMALLINT      NOT NULL
+  type                VARCHAR(30)   NOT NULL,
+  dosageForm          VARCHAR(30)   NOT NULL
 );
 
 CREATE TABLE patients (
-  id                 INT          NOT NULL PRIMARY KEY,
-  firstName          VARCHAR(255) NOT NULL,
-  lastName           VARCHAR(255) NOT NULL,
-  diagnosis          VARCHAR(255) NOT NULL,
-  healthInsurance    INTEGER      NOT NULL,
-  attendingPhysician VARCHAR(255) NOT NULL,
-  status             SMALLINT     NOT NULL,
-  doctor_id          INT          NOT NULL,
+  id                 INT            NOT NULL PRIMARY KEY,
+  firstName          VARCHAR(30)    NOT NULL,
+  lastName           VARCHAR(30)    NOT NULL,
+  diagnosis          VARCHAR(100)   NOT NULL,
+  healthInsurance    INTEGER        NOT NULL,
+  status             VARCHAR(30)    NOT NULL,
+  doctor_id          INT            NOT NULL,
   FOREIGN KEY (doctor_id) REFERENCES doctors (id),
-  diagnosis_id       INT          NOT NULL,
+  diagnosis_id       INT            NOT NULL,
   FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
 );
+
+CREATE TABLE appointments (
+  id                  INT           NOT NULL PRIMARY KEY,
+  startdate           TIMESTAMP     NOT NULL,
+  enddate             TIMESTAMP     NOT NULL,
+  dayoftheweek        VARCHAR(30)   NOT NULL,
+  timeoftheday        VARCHAR(30)   NOT NULL,
+  dosage              FLOAT         NOT NULL,
+  patient_id          INT           NOT NULL,
+  FOREIGN KEY (patient_id) REFERENCES patients (id),
+  treatment_id        INT           NOT NULL,
+  FOREIGN KEY (treatment_id) REFERENCES treatment (id)
+);
+
+CREATE TABLE events (
+  id                  INT           NOT NULL,
+  date                TIMESTAMP     NOT NULL,
+  period              VARCHAR(30)   NOT NULL,
+  status              VARCHAR(30)   NOT NULL,
+  patient_id          INT           NOT NULL,
+  FOREIGN KEY (patient_id) REFERENCES patients (id),
+  treatment_id        INT           NOT NULL,
+  FOREIGN KEY (treatment_id) REFERENCES treatment (id)
+);
+
+CREATE TABLE patients_diagnoses (
+  patient_id          INT           NOT NULL,
+  diagnosis_id        INT           NOT NULL,
+  FOREIGN KEY (patient_id) REFERENCES patients (id),
+  FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
+)
+

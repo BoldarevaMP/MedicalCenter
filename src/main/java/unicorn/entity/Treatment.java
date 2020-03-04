@@ -1,6 +1,7 @@
-package entity;
+package unicorn.entity;
 
-import entity.enums.TreatmentType;
+import unicorn.entity.enums.TreatmentDosageForm;
+import unicorn.entity.enums.TreatmentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,13 @@ public class Treatment {
     @Column (name = "type")
     private TreatmentType type;
 
+    @Enumerated (EnumType.STRING)
+    @Column (name = "dosageform")
+    private TreatmentDosageForm dosageForm;
+
+    @OneToOne (mappedBy = "treatment")
+    private Appointment appointment;
+
+    @OneToMany (mappedBy = "treatment")
+    private Event event;
 }

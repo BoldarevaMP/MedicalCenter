@@ -6,17 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
-@NoArgsConstructor
 @Table (name = "appointments")
 public class Appointment {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     @Column (name = "id")
     private Integer id;
 
@@ -26,14 +25,18 @@ public class Appointment {
     @Column (name = "enddate")
     private Date endDate;
 
-    @Enumerated (EnumType.STRING)
+    @ElementCollection(targetClass=DaysOfTheWeek.class)
+    @CollectionTable(name="appointments_dayoftheweek")
+    @Enumerated(EnumType.STRING)
     @Column (name = "dayoftheweek")
-    private List<DaysOfTheWeek> days;
+    private Collection<DaysOfTheWeek> days;
 
     //timeoftheday
+    @ElementCollection(targetClass=TimeOfTheDay.class)
+    @CollectionTable(name="appointments_timeoftheday")
     @Enumerated (EnumType.STRING)
     @Column (name = "timeoftheday")
-    private List<TimeOfTheDay> period;
+    private Collection<TimeOfTheDay> period;
 
     @Column (name = "dosage")
     private Float dosage;

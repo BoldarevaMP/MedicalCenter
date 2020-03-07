@@ -6,20 +6,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Data
-@NoArgsConstructor
 @Table (name = "diagnosis")
 public class Diagnosis {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     @Column (name = "id")
     private Integer id;
 
     @Column (name = "name")
     private String name;
-
-    @ManyToMany (mappedBy = "diagnosis")
-    private Patient patient;
 
 }

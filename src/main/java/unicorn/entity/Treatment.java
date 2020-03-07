@@ -6,15 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Data
-@NoArgsConstructor
 @Table (name = "treatment")
 public class Treatment {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     @Column (name = "id")
     private Integer id;
 
@@ -33,5 +32,5 @@ public class Treatment {
     private Appointment appointment;
 
     @OneToMany (mappedBy = "treatment")
-    private Event event;
+    private List<Event> event;
 }

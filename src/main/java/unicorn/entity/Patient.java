@@ -11,13 +11,11 @@ import java.util.List;
 
 
 @Entity
-@Data
-@NoArgsConstructor
 @Table (name = "patients")
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column (name = "id")
     private Integer id;
 
@@ -47,6 +45,6 @@ public class Patient {
     @OneToMany (mappedBy = "patient")
     private List<Appointment> appointments;
 
-    @OneToMany (mappedBy = "patient")
+    @OneToMany(mappedBy = "patient")
     private List<Event> events;
 }

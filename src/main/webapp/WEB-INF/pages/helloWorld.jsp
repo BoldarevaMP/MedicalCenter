@@ -11,7 +11,7 @@
     <title>Hello</title>
 </head>
 <body>
-${event}
+HelloWorld
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package unicorn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ public class Doctor {
     @Column(name = "lastname")
     private String lastName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "doctor")
     private List<Patient> patients;
 

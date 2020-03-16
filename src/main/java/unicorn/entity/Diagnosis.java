@@ -1,10 +1,13 @@
 package unicorn.entity;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table (name = "diagnosis")
 public class Diagnosis {
@@ -16,5 +19,4 @@ public class Diagnosis {
 
     @Column (name = "name")
     private String name;
-
 }

@@ -2,8 +2,10 @@
 .idea/
 *.iml
 *.log
-# Maven:
 
+# Maven:
 .idea
 target
+
+*.iml
 

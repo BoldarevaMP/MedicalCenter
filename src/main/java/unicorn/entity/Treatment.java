@@ -1,13 +1,15 @@
 package unicorn.entity;
 
-import unicorn.entity.enums.TreatmentDosageForm;
-import unicorn.entity.enums.TreatmentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unicorn.entity.enums.TreatmentDosageForm;
+import unicorn.entity.enums.TreatmentType;
 
 import javax.persistence.*;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table (name = "treatment")
 public class Treatment {

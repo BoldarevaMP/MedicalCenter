@@ -1,15 +1,17 @@
 package unicorn.entity;
 
-import unicorn.entity.enums.DaysOfTheWeek;
-import unicorn.entity.enums.TimeOfTheDay;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unicorn.entity.enums.DaysOfTheWeek;
+import unicorn.entity.enums.TimeOfTheDay;
+
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table (name = "appointments")
 public class Appointment {
@@ -26,14 +28,14 @@ public class Appointment {
     private Date endDate;
 
     @ElementCollection(targetClass=DaysOfTheWeek.class)
-    @CollectionTable(name="appointments_dayoftheweek")
+    @CollectionTable(name="appointments_dayoftheweek", joinColumns = @JoinColumn(name = "appointments_id"))
     @Enumerated(EnumType.STRING)
     @Column (name = "dayoftheweek")
     private Collection<DaysOfTheWeek> days;
 
     //timeoftheday
     @ElementCollection(targetClass=TimeOfTheDay.class)
-    @CollectionTable(name="appointments_timeoftheday")
+    @CollectionTable(name="appointments_timeoftheday", joinColumns = @JoinColumn(name = "appointments_id"))
     @Enumerated (EnumType.STRING)
     @Column (name = "timeoftheday")
     private Collection<TimeOfTheDay> period;

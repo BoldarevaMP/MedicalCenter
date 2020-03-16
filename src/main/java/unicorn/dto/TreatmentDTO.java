@@ -1,36 +1,21 @@
 package unicorn.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import unicorn.entity.enums.TreatmentDosageForm;
+import unicorn.entity.enums.TreatmentType;
+
+@Data
+@NoArgsConstructor
 public class TreatmentDTO {
     private Integer id;
     private String name;
+    private TreatmentType type;
+    private TreatmentDosageForm dosageForm;
 
     public TreatmentDTO(Integer id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public TreatmentDTO() {
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return id + " "+ name;
     }
 }

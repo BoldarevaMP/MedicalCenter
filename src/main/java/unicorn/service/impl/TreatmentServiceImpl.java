@@ -1,16 +1,20 @@
-package unicorn.service;
+package unicorn.service.impl;
 
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import unicorn.dao.TreatmentDAO;
-import unicorn.dao.TreatmentDAOImpl;
+import unicorn.dao.api.TreatmentDAO;
+import unicorn.dao.impl.TreatmentDAOImpl;
 import unicorn.entity.Treatment;
+import unicorn.service.api.TreatmentService;
 
 import java.util.List;
 
 @Service
-public class TreatmentServiceImpl implements TreatmentService{
+public class TreatmentServiceImpl implements TreatmentService {
+
+    private static final Logger logger = Logger.getLogger(TreatmentServiceImpl.class);
 
     @Autowired
     private TreatmentDAOImpl treatmentDAO;
@@ -20,7 +24,6 @@ public class TreatmentServiceImpl implements TreatmentService{
 
     @Override
     public void create(TreatmentDAO treatmentDAO) {
-        //public AddressDTO create(AddressDTO addressDTO) {
             if (treatmentDAO != null) {
                 Treatment treatment = modelMapper.map(treatmentDAO, Treatment.class);
                 treatmentDAO.create(treatment);
@@ -30,6 +33,6 @@ public class TreatmentServiceImpl implements TreatmentService{
 
 
    public List getAllTreatments(){
-       return treatmentDAO.getAllTreatments();
+       return null;
     }
 }

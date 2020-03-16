@@ -2,16 +2,18 @@ package unicorn.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import unicorn.entity.enums.PatientStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unicorn.entity.enums.PatientStatus;
+
 
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-
+@Data
+@NoArgsConstructor
 @Entity
 @Table (name = "patients")
 public class Patient {
@@ -35,9 +37,9 @@ public class Patient {
     @Column (name = "status")
     private PatientStatus status;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    private User user;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "patients_diagnoses", joinColumns = @JoinColumn(name = "patient_id"),

@@ -35,8 +35,10 @@ public class User {
     @Column (name = "password")
     private String password;
 
-    @Transient
-    private String confirmPassword;
+    @OneToOne (mappedBy = "doctor")
+    private Patient patient;
 
+//    @Transient
+//    private String confirmPassword;
 }
 

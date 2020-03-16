@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,4 +20,7 @@ public class Diagnosis {
 
     @Column (name = "name")
     private String name;
+
+    @ManyToMany (mappedBy = "diagnosisList")
+    private List<Patient> patientList;
 }

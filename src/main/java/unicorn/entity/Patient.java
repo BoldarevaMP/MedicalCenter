@@ -1,7 +1,6 @@
 package unicorn.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import unicorn.entity.enums.PatientStatus;
@@ -39,7 +38,7 @@ public class Patient {
 
     @OneToOne
     @JoinColumn(name = "doctor_id")
-    private User user;
+    private User doctor;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "patients_diagnoses", joinColumns = @JoinColumn(name = "patient_id"),
@@ -49,6 +48,6 @@ public class Patient {
     @OneToMany (mappedBy = "patient")
     private List<Appointment> appointments;
 
-    @OneToMany(mappedBy = "patient")
-    private List<Event> events;
+//    @OneToMany(mappedBy = "patient")
+//    private List<Event> events;
 }

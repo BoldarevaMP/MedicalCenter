@@ -12,9 +12,18 @@ CREATE TABLE diagnosis (
 CREATE TABLE treatment (
     id              INT             NOT NULL PRIMARY KEY,
     name            INT             NOT NULL,
-    type            VARCHAR(30) CHECK ( type IN ('medical procedure', 'medicine')) NOT NULL,
+    type            VARCHAR(20) CHECK ( type IN ('medical procedure', 'medicine')) NOT NULL,
     dosageForm      VARCHAR(30) CHECK ( dosageForm IN ('tablet', 'syrup', 'rectal suppository', 'vaginal suppository', 'injection')) NOT NULL
+);
 
+-- Table: users
+CREATE TABLE users (
+    id              INT             NOT NULL PRIMARY KEY,
+    firstName       VARCHAR(50)     NOT NULL,
+    lastName        VARCHAR(50)     NOT NULL,
+    role            VARCHAR(30)     CHECK ( role IN ('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_NURSE')) NOT NULL,
+    email           VARCHAR(50)     NOT NULL,
+    password        VARCHAR(255)    NOT NULL
 );
 
 -- Table: patients
@@ -22,9 +31,8 @@ CREATE TABLE patients (
     id              INT             NOT NULL PRIMARY KEY,
     firstName       VARCHAR(30)     NOT NULL,
     lastName        VARCHAR(30)     NOT NULL,
-    diagnosis       VARCHAR(100)    NOT NULL,
     healthInsurance INTEGER         NOT NULL,
-    status          VARCHAR(30)     NOT NULL,
+    status          VARCHAR(30)     CHECK ( status IN ('TREATED', 'DISCHARGED')) NOT NULL,
     doctor_id       INT             NOT NULL,
     FOREIGN KEY (doctor_id) REFERENCES users (id),
     diagnosis_id    INT             NOT NULL,
@@ -36,8 +44,8 @@ CREATE TABLE appointments (
     id              INT             NOT NULL PRIMARY KEY,
     startdate       TIMESTAMP       NOT NULL,
     enddate         TIMESTAMP       NOT NULL,
-    dayoftheweek    VARCHAR(30)     NOT NULL,
-    timeoftheday    VARCHAR(30)     NOT NULL,
+    dayoftheweek    VARCHAR(255)    NOT NULL,
+    timeoftheday    VARCHAR(255)    NOT NULL,
     dosage          FLOAT           NOT NULL,
     patient_id      INT             NOT NULL,
     FOREIGN KEY (patient_id) REFERENCES patients (id),
@@ -49,13 +57,10 @@ CREATE TABLE appointments (
 CREATE TABLE events (
     id              INT             NOT NULL,
     date            TIMESTAMP       NOT NULL,
-    period          VARCHAR(30)     NOT NULL,
-    status          VARCHAR(30)     NOT NULL,
+    status          VARCHAR(30)     CHECK (status IN ('PLANNED', 'DONE', 'CANCELLED')) NOT NULL,
     comment         VARCHAR(255),
-    patient_id      INT             ,
-    FOREIGN KEY (patient_id) REFERENCES patients (id),
-    treatment_id    INT             ,
-    FOREIGN KEY (treatment_id) REFERENCES treatment (id)
+    appointment_id  INT             ,
+    FOREIGN KEY (appointment_id) REFERENCES appointments (id)
 );
 
 -- Table for mapping patients and diagnoses: patients_diagnoses
@@ -67,20 +72,9 @@ CREATE TABLE patients_diagnoses
     FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
 );
 
--- Table: users
-CREATE TABLE users (
-    id              INT             NOT NULL PRIMARY KEY,
-    firstName       VARCHAR(50)     NOT NULL,
-    lastName        VARCHAR(50)     NOT NULL,
-    role            VARCHAR(30)     CHECK ( role IN ('ROLE_ADMIN', 'ROLE_DOCTOR', 'ROLE_NURSE')) NOT NULL,
-    email           VARCHAR(255)    NOT NULL,
-    password        VARCHAR(255)    NOT NULL
-);
-
-
 
 -- Insert data
 
-INSERT INTO  events VALUES (1, '2000-03-03', '11 clock', 'PLANNED', null, NULL,NULL);
+INSERT INTO  events VALUES (1, '2000-03-03', 'PLANNED', null, NULL);
 
 

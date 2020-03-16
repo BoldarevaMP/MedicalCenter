@@ -26,9 +26,6 @@ public class Event {
     @Column (name = "date")
     private LocalDate date;
 
-    @Column (name = "period")
-    private String timeOfTheDay;
-
     @Enumerated (EnumType.STRING)
     @Column (name = "status")
     private EventStatus status;
@@ -37,10 +34,6 @@ public class Event {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    @ManyToOne
-    @JoinColumn(name = "treatment_id")
-    private Treatment treatment;
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
 }

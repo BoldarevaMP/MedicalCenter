@@ -1,47 +1,72 @@
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
-
 <head>
+    <title>Add Event</title>
+    <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
+    <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Event List</title>
-    <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet">
-    <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet">
 </head>
-
 <body>
-<h2>List of Events</h2>
-    <table class="table table-hover">
-        <thead>
-    <tr>
-        <th width="100" >id</th>
-        <th width="100" >Date</th>
-        <th width="100">Time</th>
-        <th width="100">Patient</th>
-        <th width="100">Treatment</th>
-        <th width="100">Status</th>
-        <th width="100">Action</th>
-    </tr>
-    <c:forEach var="event" items="${eventsList}">
-        <tr>
-            <td>${event.id}</td>
-            <td>date</td>
-            <td>time</td>
-            <td>last name</td>
-            <td>treatment</td>
-            <td>${event.status}</td>
-            <td>
-                <a href="/edit/${event.id}">edit</a>
 
-            </td>
-        </tr>
-    </c:forEach>
-        </thead>
-</table>
-<script src="${contextPath}/resources/js/bootstrap.min.js" type="text/javascript"></script>
+<div class="generic-container ">
+    <div class="well lead">Event Form</div>
+    <div class="well">
+
+        <table>
+            <tr>
+                <td width="200">${event.date}</td>
+                <td width="200">${event.appointmentDTO.patientDTO.lastName} ${event.appointmentDTO.patientDTO.firstName}</td>
+                <td width="200">${event.appointmentDTO.treatmentDTO.name}</td>
+                <td width="200">${event.appointmentDTO.dosage} ${event.appointmentDTO.treatmentDTO.dosageForm}</td>
+            </tr>
+        </table>
+    </div>
+    <form:form method="POST" modelAttribute="event" class="form--horizontal ">
+        <form:input type="hidden" path="id" id="id"/>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                <div class="col-md-7">
+                    <form:select type="text" id="status" path="status" class="form-control ">
+                                <option selected value="PLANNED">PLANNED</option>
+                                <option value="DONE">DONE</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                    </form:select>
+                    <div class="has-error">
+                        <form:errors path="status" class="help-inline"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <div class="col-md-7">
+
+                    <form:input type="textarea" id="comment" path="comment" class="form-control " placeHolder="Comment"/>
+
+                        <div class="has-error">
+                        <form:errors path="comment" class="help-inline"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-actions floatLeft">
+                        <button id="button" class="btn btn-success" type="submit">Update Event</button><button class="btn btn-warning"><a href="<c:url value='/event/list' />">Cancel</a></button>
+
+            </div>
+        </div>
+    </form:form>
+</div>
+<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+</script>
 </body>
 </html>

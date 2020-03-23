@@ -4,7 +4,11 @@ import unicorn.dto.UserDTO;
 
 public interface UserService {
 
-    void create (UserDTO userDTO);
+    void create(UserDTO userDTO);
 
-    UserDTO getUserByEmail (String email);
+    void update(UserDTO userDTO);
+
+    void delete(UserDTO userDTO);
+
+    UserDTO getUserByEmail(String email);
 }

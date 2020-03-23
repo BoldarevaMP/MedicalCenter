@@ -1,7 +1,7 @@
 package unicorn.service.api;
 
-import unicorn.dao.api.TreatmentDAO;
+import unicorn.dto.TreatmentDTO;
 
 public interface TreatmentService {
-    void create (TreatmentDAO treatmentDAO);
+    void create(TreatmentDTO treatmentDTO);
 }

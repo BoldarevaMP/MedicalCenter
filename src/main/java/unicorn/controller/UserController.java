@@ -39,7 +39,6 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-
         userService.create(userForm);
         return "redirect:/welcome";
     }

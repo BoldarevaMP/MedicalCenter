@@ -25,21 +25,16 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Required");
         if (userService.getUserByEmail(userDTO.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate.userForm.login");
+            errors.rejectValue("email", "Duplicate.userForm.email");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
         if (userDTO.getPassword().length() < 8 || userDTO.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         }
-        
+
         if (!userDTO.getConfirmPassword().equals(userDTO.getPassword())) {
             errors.rejectValue("confirmPassword", "Different.userForm.password");
-        }
-
-        EmailValidator emailValidator = new EmailValidator();
-        if (!emailValidator.validate(userDTO.getEmail())) {
-            errors.rejectValue("email", "Invalid.userForm.email");
         }
 
     }

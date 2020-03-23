@@ -25,16 +25,27 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @Transactional (propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void create(UserDTO userDTO) {
-        if (userDTO != null) {
-            userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-            userDAO.create(mapper.map(userDTO, User.class));
-        }
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
+        userDAO.create(mapper.map(userDTO, User.class));
     }
 
-    @Transactional (propagation = Propagation.REQUIRED)
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(UserDTO userDTO) {
+        User user = userDAO.getById(userDTO.getId());
+        userDAO.update(mapper.map(userDTO, User.class));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void delete(UserDTO userDTO) {
+        userDAO.delete(mapper.map(userDTO, User.class));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public UserDTO getUserByEmail(String email) {
         User user = userDAO.getUserByEmail(email);

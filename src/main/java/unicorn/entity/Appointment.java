@@ -1,32 +1,30 @@
 package unicorn.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import unicorn.entity.enums.DaysOfTheWeek;
-import unicorn.entity.enums.TimeOfTheDay;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Table (name = "appointments")
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
-    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
     private Integer id;
 
-    @Column (name = "startdate")
+    @Column(name = "startdate")
     private LocalDate startDate;
 
-    @Column (name = "enddate")
+    @Column(name = "enddate")
     private LocalDate endDate;
 
 //    @ElementCollection(targetClass=DaysOfTheWeek.class)
@@ -42,18 +40,18 @@ public class Appointment {
 //    @Column (name = "timeoftheday")
 //    private Collection<TimeOfTheDay> period;
 
-    @Column (name = "dosage")
+    @Column(name = "dosage")
     private Float dosage;
 
     @ManyToOne
-    @JoinColumn (name = "patient_id")
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @OneToOne
-    @JoinColumn (name = "treatment_id")
+    @JoinColumn(name = "treatment_id")
     private Treatment treatment;
 
-    @OneToMany (mappedBy = "appointment")
+    @OneToMany(mappedBy = "appointment")
     private List<Event> eventList;
 }
 

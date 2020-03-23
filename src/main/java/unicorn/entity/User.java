@@ -1,44 +1,42 @@
 package unicorn.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import unicorn.entity.enums.Role;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column (name = "id")
+    @Column(name = "id")
     private Integer id;
 
-    @Column (name = "firstname")
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column (name = "lastname")
+    @Column(name = "lastname")
     private String lastName;
 
-    @Enumerated (EnumType.STRING)
-    @Column (name = "role")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
-    @Column (name = "email")
+    @Column(name = "email")
     private String email;
 
-    @Column (name = "password")
+    @Column(name = "password")
     private String password;
 
-    @OneToOne (mappedBy = "doctor")
-    private Patient patient;
-
-//    @Transient
-//    private String confirmPassword;
+    @OneToMany(mappedBy = "doctor")
+    private List<Patient> patient;
 }
 

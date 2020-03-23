@@ -1,6 +1,5 @@
 package unicorn.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import unicorn.dao.api.UserDAO;
 import unicorn.entity.User;
@@ -33,6 +32,5 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
         } else {
             return list.get(0);
         }
-
     }
 }

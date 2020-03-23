@@ -1,19 +1,25 @@
 package unicorn.dto;
 
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import unicorn.entity.enums.PatientStatus;
 
+import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
+import java.util.BitSet;
 import java.util.List;
-
+@Data
+@NoArgsConstructor
 public class PatientDTO {
 
     private Integer id;
     private String firstName;
     private String lastName;
-    private Integer healthInsurance;
+    @NotNull
+    private BigInteger healthInsurance;
     private PatientStatus status;
-    private UserDTO userDTO;
-    private List<DiagnosisDTO> diagnosisList;
+    private UserDTO doctorDTO;
+    private String diagnosis;
 
-    // list appointments, list events
 }

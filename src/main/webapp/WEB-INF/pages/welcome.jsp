@@ -6,7 +6,7 @@
 <body>
 
 
-Hello,Maria!
+Hello!
 <sec:authorize access="hasRole('ROLE_NURSE')">
     <p>Hi, ${pageContext.request.userPrincipal.name}  <a href="${contextPath}/logout">Log Out </a></p>
 </sec:authorize>

@@ -1,15 +1,14 @@
 package unicorn.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import unicorn.dto.EventDTO;
 import unicorn.service.api.EventService;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -19,18 +18,49 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String allEvents(Model model) {
-        List<EventDTO> events = eventService.getAll();
-        model.addAttribute("eventsList", events);
+    @RequestMapping(value = {"/list/all" }, method = RequestMethod.GET)
+    public String listEvents(ModelMap model) {
+        List<EventDTO> events = eventService.getAllPlanned();
+        model.addAttribute("events", events);
+        return "eventList";
+    }
+
+    @RequestMapping(value = {"/list/today" }, method = RequestMethod.GET)
+    public String listEventsToday(ModelMap model) {
+        List<EventDTO> events = eventService.getEventsByDateToday();
+        model.addAttribute("events", events);
+        return "eventListToday";
+    }
+
+    @RequestMapping(value = {"/list/thishour" }, method = RequestMethod.GET)
+    public String listEventsThisHour(ModelMap model) {
+        List<EventDTO> events = eventService.getEventsByDateHour();
+        model.addAttribute("events", events);
+        return "eventListThisHour";
+    }
+
+    @RequestMapping(value = { "/patient-{id}" }, method = RequestMethod.GET)
+    public String listEventsPatient (ModelMap model, @PathVariable Integer id){
+        List<EventDTO> events = eventService.getEventsByPatientId(id);
+        model.addAttribute("events", events);
+        return "eventListPatient";
+    }
+
+    @RequestMapping(value = { "/edit-event-{id}" }, method = RequestMethod.GET)
+    public String editEvent(@PathVariable Integer id, ModelMap model) {
+        EventDTO eventDTO = eventService.getByID(id);
+        model.addAttribute("event", eventDTO);
         return "event";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editEvent(@PathVariable("id") Integer id, Model model) {
-        EventDTO event = eventService.getByID(id);
-         model.addAttribute("event", event);
-        return "editEvent";
+    @RequestMapping(value = { "/edit-event-{id}" }, method = RequestMethod.POST)
+    public String updateEvent(@Valid @ModelAttribute("event") EventDTO eventDTO,BindingResult result, ModelMap model, @PathVariable Integer id) {
+        if (result.hasErrors()) {
+            return "event";
+        }
+        eventService.updateStatusAndComment(eventDTO);
+        model.addAttribute("success", "Event was updated successfully");
+        return "eventAdded";
     }
-
 }
+

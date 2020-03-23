@@ -35,13 +35,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userDAO.getUserByEmail(email);
 
         if (user != null) {
-            UserDTO userDTO= mapper.map(user, UserDTO.class);
+            UserDTO userDTO = mapper.map(user, UserDTO.class);
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
             grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRole().toString()));
             return new org.springframework.security.core.userdetails.User(userDTO.getEmail(), userDTO.getPassword(), grantedAuthorities);
         } else {
-            throw new UsernameNotFoundException("User not found.");
+            throw new UsernameNotFoundException("User is not found.");
         }
-
     }
 }

@@ -1,39 +1,42 @@
 package unicorn.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import net.bytebuddy.asm.Advice;
-import unicorn.entity.enums.EventStatus;
-import unicorn.entity.enums.TimeOfTheDay;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import unicorn.entity.enums.EventStatus;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
-@Data
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Table (name = "events")
+@Table(name = "events")
 public class Event {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
-    @Column (name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
     private Integer id;
 
-    @Column (name = "date")
-    private LocalDate date;
+    @NotNull
+    @Column(name = "date")
+    private LocalDateTime date;
 
-    @Enumerated (EnumType.STRING)
-    @Column (name = "status")
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private EventStatus status;
 
-    @Column (name = "comment")
+    @Column(name = "comment")
     private String comment;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 }

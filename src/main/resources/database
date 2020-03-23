@@ -2,18 +2,12 @@ DROP SCHEMA IF EXISTS postgres CASCADE;
 CREATE SCHEMA postgres;
 CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
 
--- Table: diagnosis
-CREATE TABLE diagnosis (
-    id              INT             NOT NULL PRIMARY KEY,
-    name            VARCHAR(100)    NOT NULL
-);
-
 -- Table: treatment
 CREATE TABLE treatment (
     id              INT             NOT NULL PRIMARY KEY,
-    name            INT             NOT NULL,
-    type            VARCHAR(20) CHECK ( type IN ('medical procedure', 'medicine')) NOT NULL,
-    dosageForm      VARCHAR(30) CHECK ( dosageForm IN ('tablet', 'syrup', 'rectal suppository', 'vaginal suppository', 'injection')) NOT NULL
+    name            VARCHAR(50)             NOT NULL ,
+    type            VARCHAR(20) CHECK ( type IN ('MEDICAL_PROCEDURE', 'MEDICINE')) ,
+    dosageForm      VARCHAR(30) CHECK ( dosageForm IN ('TAB', 'ML'))
 );
 
 -- Table: users
@@ -31,12 +25,11 @@ CREATE TABLE patients (
     id              INT             NOT NULL PRIMARY KEY,
     firstName       VARCHAR(30)     NOT NULL,
     lastName        VARCHAR(30)     NOT NULL,
-    healthInsurance INTEGER         NOT NULL,
+    healthInsurance BIGINT         NOT NULL,
     status          VARCHAR(30)     CHECK ( status IN ('TREATED', 'DISCHARGED')) NOT NULL,
-    doctor_id       INT             NOT NULL,
-    FOREIGN KEY (doctor_id) REFERENCES users (id),
-    diagnosis_id    INT             NOT NULL,
-    FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
+    diagnosis       VARCHAR(255),
+     doctor_id       INT             ,
+     FOREIGN KEY (doctor_id) REFERENCES users (id)
 );
 
 -- Table: appointments
@@ -47,9 +40,9 @@ CREATE TABLE appointments (
     dayoftheweek    VARCHAR(255)    NOT NULL,
     timeoftheday    VARCHAR(255)    NOT NULL,
     dosage          FLOAT           NOT NULL,
-    patient_id      INT             NOT NULL,
+    patient_id      INT             ,
     FOREIGN KEY (patient_id) REFERENCES patients (id),
-    treatment_id    INT             NOT NULL,
+    treatment_id    INT             ,
     FOREIGN KEY (treatment_id) REFERENCES treatment (id)
 );
 
@@ -59,22 +52,13 @@ CREATE TABLE events (
     date            TIMESTAMP       NOT NULL,
     status          VARCHAR(30)     CHECK (status IN ('PLANNED', 'DONE', 'CANCELLED')) NOT NULL,
     comment         VARCHAR(255),
-    appointment_id  INT             ,
+    appointment_id  INT,
     FOREIGN KEY (appointment_id) REFERENCES appointments (id)
 );
 
--- Table for mapping patients and diagnoses: patients_diagnoses
-CREATE TABLE patients_diagnoses
-(
-    patient_id      INT             NOT NULL,
-    diagnosis_id    INT             NOT NULL,
-    FOREIGN KEY (patient_id) REFERENCES patients (id),
-    FOREIGN KEY (diagnosis_id) REFERENCES diagnosis (id)
-);
 
 
--- Insert data
 
-INSERT INTO  events VALUES (1, '2000-03-03', 'PLANNED', null, NULL);
+
 
 

@@ -14,6 +14,7 @@
 
 <div class="generic-container ">
     <div class="well lead">Patient Form</div>
+
     <form:form method="POST" modelAttribute="patient" class="form--horizontal ">
         <form:input type="hidden" path="id" id="id"/>
 
@@ -48,16 +49,16 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col-md-12">
-                <div class="col-md-7">
-                    <form:input type="text" id="status" path="status" class="form-control" placeHolder="Status"/>
-                    <div class="has-error">
-                        <form:errors path="status" class="help-inline"/>
-                    </div>
-                </div>
-            </div>
-        </div>
+<%--        <div class="row">--%>
+<%--            <div class="form-group col-md-12">--%>
+<%--                <div class="col-md-7">--%>
+<%--                    <form:input type="text" id="status" path="status" class="form-control" placeHolder="Status"/>--%>
+<%--                    <div class="has-error">--%>
+<%--                        <form:errors path="status" class="help-inline"/>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
         <div class="row">
             <div class="form-group col-md-12">
                 <div class="col-md-7">
@@ -92,6 +93,18 @@
             </div>
         </div>
     </form:form>
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 <script type="text/javascript">

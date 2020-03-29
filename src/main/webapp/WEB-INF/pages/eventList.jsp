@@ -46,8 +46,8 @@
                     <td>${event.appointmentDTO.dosage} ${event.appointmentDTO.treatmentDTO.dosageForm}</td>
                     <td>${event.status}</td>
                     <td></td>
-                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class="btn btn-success custom-width">edit</a></td>
-                   <td><a href="<c:url value="/event/patient-${event.appointmentDTO.patientDTO.id}" />" class="btn btn-danger custom-width">patient</a></td>
+                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a></td>
+                    <td><a href="<c:url value="/event/patient-${event.appointmentDTO.patientDTO.id}" />" class="btn btn-danger custom-width">patient</a></td>
                </tr>
             </c:forEach>
             </tbody>

@@ -27,6 +27,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Start Date</th>
                 <th>Diagnosis</th>
                 <th>Status</th>
                 <th>Doctor</th>
@@ -38,6 +39,7 @@
             <c:forEach items="${patients}" var="patient">
                 <tr>
                     <td>${patient.lastName} ${patient.firstName}</td>
+                    <td>${patient.startDate}</td>
                     <td>${patient.diagnosis}</td>
                     <td>${patient.status}</td>
                     <td>${patient.doctorDTO.lastName}</td>

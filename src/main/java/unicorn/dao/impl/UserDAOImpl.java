@@ -33,4 +33,21 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
             return list.get(0);
         }
     }
+
+    @Override
+    public User getUserByName(String name) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        if (name != null) {
+            criteriaQuery.where(entityManager.getCriteriaBuilder().equal(userRoot.get("email"), name));
+        }
+        List<User> list = entityManager.createQuery(criteriaQuery).getResultList();
+        if (list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
 }

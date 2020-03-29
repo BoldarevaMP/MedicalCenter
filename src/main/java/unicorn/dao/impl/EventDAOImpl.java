@@ -45,10 +45,11 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     }
 
     @Override
+
     public List<Event> getEventsByPatientId(Integer patId) {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events JOIN appointments a\n" +
                 "ON events.appointment_id = a.id\n" +
-                "WHERE a.patient_id =   :patId ", Event.class).setParameter("patId", patId).getResultList();
+                "WHERE a.patient_id =   :patId AND status LIKE 'PLANNED'", Event.class).setParameter("patId", patId).getResultList();
 
         return list.isEmpty()? null:list;
     }

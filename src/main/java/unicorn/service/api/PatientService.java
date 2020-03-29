@@ -11,5 +11,6 @@ public interface PatientService {
 
     void update(PatientDTO patientDTO);
 
-    PatientDTO getByID(Integer id);
+    PatientDTO getById(Integer id);
+
 }

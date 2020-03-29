@@ -1,23 +1,40 @@
 package unicorn.dto;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import unicorn.entity.enums.DaysOfTheWeek;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import unicorn.entity.enums.DaysOfWeek;
 import unicorn.entity.enums.TimeOfTheDay;
 
-import java.time.LocalDateTime;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class AppointmentDTO {
     private Integer id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private List<DaysOfTheWeek> days;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDate startDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDate endDate;
+
+    private List<DaysOfWeek> days;
+
     private List<TimeOfTheDay> time;
-    private Float dosage;
+
+    private Integer dosage;
+
     private PatientDTO patientDTO;
+
     private TreatmentDTO treatmentDTO;
 
 }

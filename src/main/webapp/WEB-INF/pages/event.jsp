@@ -6,7 +6,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>Add Event</title>
+    <title>Edit Event</title>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 
@@ -58,7 +58,7 @@
 
         <div class="row">
             <div class="form-actions floatLeft">
-                        <button id="button" class="btn btn-success" type="submit">Update Event</button><button class="btn btn-warning"><a href="<c:url value='/event/list' />">Cancel</a></button>
+                        <button id="button" class="btn btn-success" type="submit">Update Event</button><button class="btn btn-warning"><a href="<c:url value='/event/list/all' />">Cancel</a></button>
 
             </div>
         </div>

@@ -44,12 +44,32 @@ public class EventController {
         List<EventDTO> events = eventService.getEventsByPatientId(id);
         model.addAttribute("events", events);
         return "eventListPatient";
+
+    }
+
+    @RequestMapping(value = {"/addEvent"}, method = RequestMethod.GET)
+    public String newEvent(ModelMap model) {
+        EventDTO eventDTO =  new EventDTO();
+        model.addAttribute("event", eventDTO);
+        model.addAttribute("edit", false);
+        return "event";
+    }
+
+    @RequestMapping(value = {"/addEvent"},method = RequestMethod.POST)
+    public String saveEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult result , ModelMap model){
+        if (result.hasErrors()) {
+            return "event";
+        }
+        eventService.create(eventDTO);
+        model.addAttribute("success", "Event was saved successfully");
+        return "eventAdded";
     }
 
     @RequestMapping(value = { "/edit-event-{id}" }, method = RequestMethod.GET)
     public String editEvent(@PathVariable Integer id, ModelMap model) {
         EventDTO eventDTO = eventService.getByID(id);
         model.addAttribute("event", eventDTO);
+        model.addAttribute("edit", true);
         return "event";
     }
 
@@ -62,5 +82,6 @@ public class EventController {
         model.addAttribute("success", "Event was updated successfully");
         return "eventAdded";
     }
+
 }
 

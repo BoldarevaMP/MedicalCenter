@@ -37,5 +37,5 @@ public class UserDTO {
     @Transient
     private String confirmPassword;
 
-    private Role role;
+    private Role role = Role.ROLE_DOCTOR;
 }

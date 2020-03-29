@@ -9,6 +9,8 @@ import unicorn.entity.enums.PatientStatus;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,9 +31,12 @@ public class Patient {
     @Column(name = "lastname")
     private String lastName;
 
-    @Size(min = 16, max = 16, message = "This field must contain 16 digits.")
+    //@Size(min = 16, max = 16, message = "This field must contain 16 digits.")
     @Column(name = "healthinsurance")
-    private BigInteger healthInsurance;
+    private Long healthInsurance;
+
+    @Column(name = "startdate")
+    private LocalDate startDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

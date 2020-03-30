@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import unicorn.dto.EventDTO;
 import unicorn.service.api.EventService;
+import unicorn.service.api.PatientService;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -18,9 +20,12 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private PatientService patientService;
+
     @RequestMapping(value = {"/list/all" }, method = RequestMethod.GET)
     public String listEvents(ModelMap model) {
-        List<EventDTO> events = eventService.getAllPlanned();
+        List<EventDTO> events = eventService.getAll();
         model.addAttribute("events", events);
         return "eventList";
     }
@@ -37,6 +42,13 @@ public class EventController {
         List<EventDTO> events = eventService.getEventsByDateHour();
         model.addAttribute("events", events);
         return "eventListThisHour";
+    }
+
+    @RequestMapping(value = { "/patientName" }, method = RequestMethod.GET)
+    public String listPatientByLastName (ModelMap model, @RequestParam String lastName){
+        model.addAttribute("patients", patientService.getPatientByLastName(lastName));
+        return "patientByName";
+
     }
 
     @RequestMapping(value = { "/patient-{id}" }, method = RequestMethod.GET)

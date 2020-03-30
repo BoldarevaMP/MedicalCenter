@@ -19,7 +19,7 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
 
     @Override
     public List<Event> getEventsByDateToday() {
-        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE DATE(date) = CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day' AND status LIKE 'PLANNED'", Event.class).getResultList();
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE DATE(date) = CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day'", Event.class).getResultList();
         if (list.isEmpty()) {
             return new ArrayList<>();
         } else {
@@ -29,7 +29,7 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
 
     @Override
     public List<Event> getEventsByDateHour() {
-        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW() AND date < (NOW() + INTERVAL '1 hour') AND status LIKE 'PLANNED'", Event.class).getResultList();
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW() AND date < (NOW() + INTERVAL '1 hour')", Event.class).getResultList();
         if (list.isEmpty()) {
             return new ArrayList<>();
         } else {
@@ -49,7 +49,7 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     public List<Event> getEventsByPatientId(Integer patId) {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events JOIN appointments a\n" +
                 "ON events.appointment_id = a.id\n" +
-                "WHERE a.patient_id =   :patId AND status LIKE 'PLANNED'", Event.class).setParameter("patId", patId).getResultList();
+                "WHERE a.patient_id =   :patId", Event.class).setParameter("patId", patId).getResultList();
 
         return list.isEmpty()? null:list;
     }

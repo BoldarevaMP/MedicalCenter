@@ -89,7 +89,7 @@
         let password = document.getElementById("Password").value;
         let confirmPassword = document.getElementById("ConfirmPassword").value;
 
-        let regexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        var regexp = "^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$";
 
         if (firstName === "" || firstName.length < 1) {
             swal("Please enter your 'firstname', length must be over 1 symbol");
@@ -99,15 +99,15 @@
             swal("Please enter your 'lastname', length must be over 1 symbol");
             return false;
         }
-        if(regexp.test(String(email).toLowerCase())){
+        if(email.length < 5 || regexp.test(String(email).toLowerCase())){
             swal("Invalid form email");
             return false;
         }
-        if (password == null || password === "" || password.length < 8) {
+        if (password === "" || password.length < 8) {
             swal("Please enter your 'password', length must be over 4 symbol");
             return false;
         }
-        if (confirmPassword == null || confirmPassword === "" || confirmPassword.length < 8) {
+        if (confirmPassword === "" || confirmPassword.length < 8) {
             swal("Please enter your 'confirm password', length must be over 4 symbol");
             return false;
         }

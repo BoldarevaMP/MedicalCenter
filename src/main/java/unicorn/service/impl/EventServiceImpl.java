@@ -58,6 +58,30 @@ public class EventServiceImpl implements EventService {
         return eventDTOList;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<EventDTO> getAll() {
+        List<Event> eventList = eventDAO.getAll();
+        List<EventDTO> eventDTOList = new ArrayList<>();
+        for (int i = 0; i < eventList.size(); i++) {
+            EventDTO eventDTO = new EventDTO();
+            eventDTO.setId(eventList.get(i).getId());
+            eventDTO.setDate(eventList.get(i).getDate());
+            eventDTO.setStatus(eventList.get(i).getStatus());
+            eventDTO.setComment(eventList.get(i).getComment());
+
+            AppointmentDTO appointmentDTO = new AppointmentDTO();
+            Appointment appointment = eventList.get(i).getAppointment();
+            appointmentDTO.setId(appointment.getId());
+            appointmentDTO.setDosage(appointment.getDosage());
+            appointmentDTO.setTreatmentDTO(modelMapper.map(appointment.getTreatment(), TreatmentDTO.class));
+            appointmentDTO.setPatientDTO(modelMapper.map(appointment.getPatient(), PatientDTO.class));
+            eventDTO.setAppointmentDTO(appointmentDTO);
+            eventDTOList.add(eventDTO);
+        }
+        return eventDTOList;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public EventDTO getByID(Integer id) {

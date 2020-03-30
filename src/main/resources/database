@@ -102,13 +102,13 @@ VALUES (3, '2020-03-25', '2010-03-25', 10, 1, 2);
 
 
 INSERT INTO events
-VALUES (1, '2020-03-23T10:30', 'PLANNED', null, 1);
+VALUES (1, '2020-03-23T10:30', 'CANCELLED', null, 1);
 INSERT INTO events
-VALUES (2, '2020-03-23T13:30', 'PLANNED', null, 2);
+VALUES (2, '2020-03-23T13:30', 'DONE', null, 2);
 INSERT INTO events
 VALUES (3, '2020-03-25T10:30', 'PLANNED', null, 2);
 INSERT INTO events
-VALUES (4, '2020-03-23T16:30', 'PLANNED', null, 3);
+VALUES (4, '2020-03-23T16:30', 'DONE', null, 3);
 
 INSERT INTO appointments_daysofweek
 VALUES (1, 'MON');

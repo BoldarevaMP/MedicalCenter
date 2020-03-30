@@ -8,6 +8,8 @@ import java.util.List;
 public interface EventService {
     List<EventDTO> getAllPlanned();
 
+    List<EventDTO> getAll();
+
     EventDTO getByID(Integer id);
 
     void update(EventDTO eventDTO);

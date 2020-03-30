@@ -89,12 +89,7 @@ public class PatientController {
         return "appointment";
     }
 
-    @RequestMapping(value = { "/patientName" }, method = RequestMethod.GET)
-    public String listPatientByLastName (ModelMap model, @RequestParam String lastName){
-        model.addAttribute("patients", patientService.getPatientByLastName(lastName));
-        return "patientByName";
 
-    }
 //    @RequestMapping(value = { "/edit-appointment-{id}" }, method = RequestMethod.POST)
 //    public String updateEvent(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO, BindingResult result, ModelMap model, @PathVariable Integer id) {
 //        if (result.hasErrors()) {

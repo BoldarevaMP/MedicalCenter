@@ -31,6 +31,7 @@
                 <th>Treatment</th>
                 <th>Dosage</th>
                 <th>Status</th>
+                <th>Comment</th>
                 <th width="100"></th>
 
             </tr>
@@ -43,8 +44,14 @@
                     <td>${event.appointmentDTO.treatmentDTO.name}</td>
                     <td>${event.appointmentDTO.dosage} ${event.appointmentDTO.treatmentDTO.dosageForm}</td>
                     <td>${event.status}</td>
-                    <td></td>
-                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class="btn btn-success custom-width">edit</a></td>
+                    <td>${event.comment}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${event.status =='PLANNED'}">
+                                <a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a>
+                            </c:when>
+                        </c:choose>
+                    </td>
 
                 </tr>
             </c:forEach>

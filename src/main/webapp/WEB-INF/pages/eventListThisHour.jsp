@@ -22,7 +22,21 @@
         <button class="btn"><a href="<c:url value="/event/list/thishour"/>">This Hour Events</a></button>
     </div>
     <div class="panel panel-default">
-
+        <form method="GET" action="${contextPath}/event/patientName" class="form--horizontal ">
+            <div class="well">
+                <table>
+                    <tr>
+                        <td width="200">
+                            <input name="lastName" class="form-control " placeHolder="Patient Last Name"/>
+                        </td>
+                        <td width="10"></td>
+                        <td width="200">
+                            <button id="button" class="btn btn-primary" type="submit">Search</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
 
 
 
@@ -37,7 +51,7 @@
                 <th>Treatment</th>
                 <th>Dosage</th>
                 <th>Status</th>
-                <th width="100"></th>
+                <th >Comment</th>
                 <th width="100"></th>
             </tr>
             </thead>
@@ -49,9 +63,14 @@
                     <td>${event.appointmentDTO.treatmentDTO.name}</td>
                     <td>${event.appointmentDTO.dosage} ${event.appointmentDTO.treatmentDTO.dosageForm}</td>
                     <td>${event.status}</td>
-                    <td></td>
-                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class="btn btn-success custom-width">edit</a></td>
-                    <td><a href="<c:url value="/event/patient-${event.appointmentDTO.patientDTO.id}" />" class="btn btn-danger custom-width">patient</a></td>
+                    <td>${event.comment}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${event.status =='PLANNED'}">
+                                <a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a>
+                            </c:when>
+                        </c:choose>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

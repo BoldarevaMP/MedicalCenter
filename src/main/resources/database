@@ -1,6 +1,6 @@
 DROP SCHEMA IF EXISTS postgres CASCADE;
 CREATE SCHEMA postgres;
-CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE hibernate_sequence START WITH 100 INCREMENT BY 1;
 
 -- Table: treatment
 CREATE TABLE treatment

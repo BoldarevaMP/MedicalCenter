@@ -7,11 +7,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import unicorn.dao.api.AppointmentDAO;
 import unicorn.dao.api.EventDAO;
+import unicorn.dao.api.TreatmentDAO;
 import unicorn.dto.AppointmentDTO;
 import unicorn.dto.PatientDTO;
 import unicorn.dto.TreatmentDTO;
 import unicorn.entity.Appointment;
+import unicorn.entity.Event;
+import unicorn.entity.Patient;
+import unicorn.entity.Treatment;
 import unicorn.entity.enums.DaysOfWeek;
+import unicorn.entity.enums.EventStatus;
 import unicorn.entity.enums.TimeOfTheDay;
 import unicorn.service.api.AppointmentService;
 
@@ -34,26 +39,37 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private EventDAO eventDAO;
 
+    @Autowired
+    private TreatmentDAO treatmentDAO;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(AppointmentDTO appointmentDTO) {
         List<LocalDate> dates = getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(), appointmentDTO.getEndDate(), appointmentDTO.getDays());
-        List<LocalDateTime> dateWithTime = setTimeToDates(dates,appointmentDTO.getTime());
+        List<LocalDateTime> datesWithTime = setTimeToDates(dates, appointmentDTO.getTime());
 
-        appointmentDAO.create(mapper.map(appointmentDTO, Appointment.class));
-    }
+        Appointment appointment = new Appointment();
+        appointment.setId(appointmentDTO.getId());
+        appointment.setStartDate(appointmentDTO.getStartDate());
+        appointment.setEndDate(appointmentDTO.getEndDate());
+        appointment.setDosage(appointmentDTO.getDosage());
+        appointment.setDays(appointmentDTO.getDays());
+        appointment.setTime(appointmentDTO.getTime());
+        appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDTO().getName()));
+        appointment.setPatient(mapper.map(appointmentDTO.getPatientDTO(), Patient.class));
+        appointmentDAO.create(appointment);
 
-    private List<LocalDateTime> setTimeToDates(List<LocalDate> localDate, List<TimeOfTheDay> timeOfTheDays) {
-        List<LocalDateTime> dates = new ArrayList<>();
-        for (int i = 0; i < timeOfTheDays.size(); i++) {
-            String[] time = timeOfTheDays.get(i).toString().split(":");
-            int hour = Integer.parseInt(time[0]);
-            int minute = Integer.parseInt(time[1]);
-             for (int j = 0; j < localDate.size(); j++) {
-                dates.add(localDate.get(j).atTime(hour,minute));
-            }
+        List<Event> eventList = new ArrayList<>();
+        for (int i = 0; i < datesWithTime.size(); i++) {
+            Event event = new Event();
+            event.setDate(datesWithTime.get(i));
+            event.setStatus(EventStatus.PLANNED);
+            event.setAppointment(appointment);
+            eventList.add(event);
+            eventDAO.create(event);
         }
-        return dates;
+        appointment.setEventList(eventList);
+        appointmentDAO.update(appointment);
     }
 
     @Override
@@ -143,5 +159,18 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return day;
     }
-}
 
+
+    private List<LocalDateTime> setTimeToDates(List<LocalDate> localDate, List<TimeOfTheDay> timeOfTheDays) {
+        List<LocalDateTime> dates = new ArrayList<>();
+        for (int i = 0; i < timeOfTheDays.size(); i++) {
+            String[] time = timeOfTheDays.get(i).toString().split(":");
+            int hour = Integer.parseInt(time[0]);
+            int minute = Integer.parseInt(time[1]);
+            for (int j = 0; j < localDate.size(); j++) {
+                dates.add(localDate.get(j).atTime(hour, minute));
+            }
+        }
+        return dates;
+    }
+}

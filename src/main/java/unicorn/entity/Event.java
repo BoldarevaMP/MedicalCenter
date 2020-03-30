@@ -35,7 +35,6 @@ public class Event {
     @Column(name = "comment")
     private String comment;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;

@@ -82,6 +82,5 @@ public class EventController {
         model.addAttribute("success", "Event was updated successfully");
         return "eventAdded";
     }
-
 }
 

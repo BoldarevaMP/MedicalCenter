@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 
 <head>
@@ -22,6 +23,21 @@
         <button class="btn"><a href="<c:url value="/event/list/thishour"/>">This Hour Events</a></button>
     </div>
     <div class="panel panel-default">
+        <form method="GET" action="${contextPath}/patient/patientName" class="form--horizontal ">
+        <div class="well">
+            <table>
+                    <tr>
+                        <td width="200">
+                            <input name="lastName" class="form-control " placeHolder="Patient LastName"/>
+                        </td>
+                        <td width="10"></td>
+                        <td width="200">
+                            <button id="button" class="btn btn-primary" type="submit">Search</button>
+                        </td>
+                    </tr>
+            </table>
+        </div>
+        </form>
 
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">List of Events </span></div>
@@ -33,6 +49,7 @@
                 <th>Treatment</th>
                 <th>Dosage</th>
                 <th>Status</th>
+                <th>Comment</th>
                 <th width="100"></th>
                 <th width="100"></th>
             </tr>
@@ -45,9 +62,21 @@
                     <td>${event.appointmentDTO.treatmentDTO.name}</td>
                     <td>${event.appointmentDTO.dosage} ${event.appointmentDTO.treatmentDTO.dosageForm}</td>
                     <td>${event.status}</td>
-                    <td></td>
-                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a></td>
-                    <td><a href="<c:url value="/event/patient-${event.appointmentDTO.patientDTO.id}" />" class="btn btn-danger custom-width">patient</a></td>
+                    <td>${event.comment}</td>
+                    <td>
+                    <c:choose>
+                        <c:when test="${event.status =='PLANNED'}">
+                        <a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a>
+                        </c:when>
+<%--                        <c:otherwise>--%>
+<%--                            <option disabled selected>Dough not found</option>--%>
+<%--                        </c:otherwise>--%>
+                    </c:choose>
+
+
+
+<%--                    <td><a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a></td>--%>
+<%--                    <td><a href="<c:url value="/event/patient-${event.appointmentDTO.patientDTO.id}" />" class="btn btn-danger custom-width">patient</a></td>--%>
                </tr>
             </c:forEach>
             </tbody>

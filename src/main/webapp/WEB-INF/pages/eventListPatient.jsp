@@ -17,7 +17,7 @@
 <body>
 <div class="generic-container">
     <div class="well">
-        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Events</a></button>
+        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Patients</a></button>
     </div>
     <div class="panel panel-default">
 

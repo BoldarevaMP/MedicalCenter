@@ -6,15 +6,51 @@
 <html>
 <head>
     <title>Edit Event</title>
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
-
 </head>
 <body>
 
 <div class="generic-container ">
     <div class="well lead">Appointment Form</div>
     <form:form method="POST" modelAttribute="appointment" class="form--horizontal ">
+        <div class="row">
+            <div class="form-group col-md-12">
+
+                <div class="col-md-6">
+                    <span>Type of Treatment</span>
+                    <form:select type="text" id="treatmentDTO.type" path="treatmentDTO.type" class="form-control ">
+                        <option value="MEDICAL_PROCEDURE">MEDICAL PROCEDURE</option>
+                        <option value="MEDICINE">MEDICINE</option>
+                    </form:select>
+                    <div class="has-error">
+                        <form:errors path="treatmentDTO.type" class="help-inline"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                <div class="col-md-6">
+                    <span>Treatment Name</span>
+                    <form:input  type="text" id="treatmentDTO.name" path="treatmentDTO.name" class="AutoName form-control"/>
+                    <div class="has-error">
+                        <form:errors path="treatmentDTO.name" class="help-inline"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <span>Dosage</span>
+                    <form:input  type="text" id="dosage" path="dosage" class="form-control"/>
+                    <div class="has-error">
+                        <form:errors path="dosage" class="help-inline"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="form-group col-md-12">
 
@@ -35,6 +71,7 @@
             </div>
             <div class="form-group col-md-12">
                 <div class="col-md-6">
+                    <span>Day of Week</span>
                     <form:select type="text" id="days" multiple="true" path="days" class="form-control ">
                         <option value="MON">MONDAY</option>
                         <option value="TUE">TUESDAY</option>
@@ -49,6 +86,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <span>Time of Day</span>
                     <form:select type="text" id="days" multiple="true" path="time" class="form-control ">
                         <option value="AM_12">00:00</option>
                         <option value="AM_1">01:00</option>
@@ -84,15 +122,33 @@
 
         <div class="row">
             <div class="form-actions floatLeft">
-                <button id="button" class="btn btn-success" type="submit">Update Event</button>
-                <button class="btn btn-warning"><a href="<c:url value='/addAppointment' />">Cancel</a></button>
+                <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
+                <button class="btn btn-warning"><a href="<c:url value='/addAppointment'/>">Cancel</a></button>
             </div>
         </div>
     </form:form>
 </div>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-<script type="text/javascript">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.AutoName').autocomplete({
+            source: function (req, resp) {
+                $.getJSON({
+                    url: "/getTreatmentByName",
+                    data: {name: $('.AutoName').val()},
+                    success: function (data) {
+                        resp($.map(data, function(v,i){
+                            return v.name;
+                        }));
+                    }
+                });
+            }
+        })
+    })
 </script>
 </body>
 </html>

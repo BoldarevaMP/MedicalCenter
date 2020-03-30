@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import unicorn.dao.api.PatientDAO;
 import unicorn.dao.api.UserDAO;
 import unicorn.dto.PatientDTO;
+import unicorn.dto.TreatmentDTO;
 import unicorn.dto.UserDTO;
 import unicorn.entity.Patient;
 import unicorn.entity.User;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -107,5 +109,11 @@ public class PatientServiceImpl implements PatientService {
         return patientDTO;
     }
 
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<PatientDTO> getPatientByLastName(String lastName){
+        List<Patient> list = patientDAO.getPatientByLastName(lastName);
+        return list.stream().map(patient -> mapper.map(patient, PatientDTO.class))
+                .collect(Collectors.toList());
+    }
 }

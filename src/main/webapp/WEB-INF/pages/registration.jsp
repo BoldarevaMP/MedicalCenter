@@ -52,21 +52,21 @@
         </spring:bind>
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="email" class="form-control" placeholder="Email"></form:input>
+                <form:input id="Email" type="text" path="email" class="form-control" placeholder="Email"></form:input>
                 <form:errors path="email"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
+                <form:input type="password" id="Password" path="password" class="form-control" placeholder="Password"></form:input>
                 <form:errors path="password"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="confirmPassword">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="confirmPassword" class="form-control"
+                <form:input type="password" id="ConfirmPassword" path="confirmPassword" class="form-control"
                             placeholder="Confirm your password"></form:input>
                 <form:errors path="confirmPassword"></form:errors>
             </div>
@@ -79,8 +79,43 @@
 </div>
 <!-- /container -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resources/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="${contextPath}/resources/js/js.js"></script>
+<script type="text/javascript">
+    function validate() {
+        let firstName = document.getElementById("FirstName").value;
+        let lastName = document.getElementById("LastName").value;
+        let email = document.getElementById("Email").value;
+        let password = document.getElementById("Password").value;
+        let confirmPassword = document.getElementById("ConfirmPassword").value;
+
+        let regexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+        if (firstName === "" || firstName.length < 1) {
+            swal("Please enter your 'firstname', length must be over 1 symbol");
+            return false;
+        }
+        if (lastName === "" || lastName.length < 1) {
+            swal("Please enter your 'lastname', length must be over 1 symbol");
+            return false;
+        }
+        if(regexp.test(String(email).toLowerCase())){
+            swal("Invalid form email");
+            return false;
+        }
+        if (password == null || password === "" || password.length < 8) {
+            swal("Please enter your 'password', length must be over 4 symbol");
+            return false;
+        }
+        if (confirmPassword == null || confirmPassword === "" || confirmPassword.length < 8) {
+            swal("Please enter your 'confirm password', length must be over 4 symbol");
+            return false;
+        }
+        if (password !== confirmPassword) {
+            swal("Password doesn't match");
+            return false;
+        }
+    }
+</script>
 
 </body>

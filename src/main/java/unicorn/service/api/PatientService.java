@@ -1,6 +1,7 @@
 package unicorn.service.api;
 
 import unicorn.dto.PatientDTO;
+import unicorn.entity.Patient;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface PatientService {
 
     PatientDTO getById(Integer id);
 
+    List<PatientDTO> getPatientByLastName(String name);
 }

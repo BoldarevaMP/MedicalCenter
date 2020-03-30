@@ -2,38 +2,50 @@ package unicorn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import unicorn.dto.AppointmentDTO;
-import unicorn.dto.EventDTO;
-import unicorn.dto.UserDTO;
+import unicorn.dto.PatientDTO;
+import unicorn.dto.TreatmentDTO;
+import unicorn.entity.Treatment;
 import unicorn.service.api.AppointmentService;
-import unicorn.service.impl.AppointmentServiceImpl;
+import unicorn.service.api.TreatmentService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-//@RequestMapping(value = "/")
 public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
 
-    @RequestMapping(value = {"/addAppointment" }, method = RequestMethod.GET)
+    @Autowired
+    private TreatmentService treatmentService;
+
+    @RequestMapping(value = {"/addAppointment"}, method = RequestMethod.GET)
     public String addAppointment(ModelMap model) {
         model.addAttribute("appointment", new AppointmentDTO());
         return "appointment";
     }
 
     @RequestMapping(value = "/addAppointment", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("appointment") AppointmentDTO appointment, BindingResult bindingResult) {
-            if (bindingResult.hasErrors()) {
+    public String addAppointment(@ModelAttribute("appointment") AppointmentDTO appointment,
+                               BindingResult bindingResult, Model model, HttpSession session) {
+        if (bindingResult.hasErrors()) {
             return "appointment";
         }
+        appointment.setPatientDTO((PatientDTO) session.getAttribute("patient"));
         appointmentService.create(appointment);
-        return "redirect:/welcome";
+        model.addAttribute("patId", appointment.getPatientDTO().getId());
+        return "redirect:/patient/edit-patient-{patId}";
+    }
+
+    @RequestMapping(value = {"/getTreatmentByName"}, method = RequestMethod.GET)
+    public @ResponseBody
+    List<TreatmentDTO> getTreatments(@RequestParam String name) {
+        return treatmentService.getByLikeNames(name);
     }
 }

@@ -30,8 +30,4 @@ public class Treatment {
     @Enumerated(EnumType.STRING)
     @Column(name = "dosageform")
     private TreatmentDosageForm dosageForm;
-
-    @OneToOne(mappedBy = "treatment")
-    private Appointment appointment;
-
 }

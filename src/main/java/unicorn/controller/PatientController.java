@@ -88,18 +88,4 @@ public class PatientController {
         model.addAttribute("edit", true);
         return "appointment";
     }
-
-
-//    @RequestMapping(value = { "/edit-appointment-{id}" }, method = RequestMethod.POST)
-//    public String updateEvent(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO, BindingResult result, ModelMap model, @PathVariable Integer id) {
-//        if (result.hasErrors()) {
-//            return "appointment";
-//        }
-//        appointmentService.
-//        eventService.updateStatusAndComment(eventDTO);
-//        model.addAttribute("success", "Event was updated successfully");
-//        return "eventAdded";
-//    }
-
-
 }

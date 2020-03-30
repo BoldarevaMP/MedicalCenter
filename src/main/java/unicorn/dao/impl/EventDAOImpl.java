@@ -53,4 +53,10 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
 
         return list.isEmpty()? null:list;
     }
+
+    @Override
+    public List<Event> getAllSorted() {
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events ORDER BY date", Event.class).getResultList();
+        return list;
+    }
 }

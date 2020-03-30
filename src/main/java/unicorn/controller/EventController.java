@@ -7,6 +7,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import unicorn.dto.EventDTO;
+import unicorn.dto.PatientDTO;
+import unicorn.dto.TreatmentDTO;
 import unicorn.service.api.EventService;
 import unicorn.service.api.PatientService;
 
@@ -49,6 +51,12 @@ public class EventController {
         model.addAttribute("patients", patientService.getPatientByLastName(lastName));
         return "patientByName";
 
+    }
+
+    @RequestMapping(value = {"/getPatientsByName"}, method = RequestMethod.GET)
+    public @ResponseBody
+    List<PatientDTO> getPatients(@RequestParam String name) {
+        return patientService.getByLikeName(name);
     }
 
     @RequestMapping(value = { "/patient-{id}" }, method = RequestMethod.GET)

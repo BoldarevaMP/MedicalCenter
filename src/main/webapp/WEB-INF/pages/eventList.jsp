@@ -13,6 +13,7 @@
     <title>Events List</title>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet">
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet">
+    <link  href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,12 +24,12 @@
         <button class="btn"><a href="<c:url value="/event/list/thishour"/>">This Hour Events</a></button>
     </div>
     <div class="panel panel-default">
-        <form method="GET" action="${contextPath}/event/patientName" class="form--horizontal ">
+        <form method="GET" action="${contextPath}/event/patientName" class="form--horizontal   ">
         <div class="well">
             <table>
                     <tr>
                         <td width="200">
-                            <input name="lastName" class="form-control " placeHolder="Patient Last Name"/>
+                            <input name="lastName" class="Names form-control " placeHolder="Patient Last Name"/>
                         </td>
                         <td width="10"></td>
                         <td width="200">
@@ -75,5 +76,27 @@
     </div>
 
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.Names').autocomplete({
+            source: function (req, resp) {
+                $.getJSON({
+                    url: "/event/getPatientsByName",
+                    data: {name: $('.Names').val()},
+                    success: function (data) {
+                        resp($.map(data, function(v,i){
+                            return v.lastName;
+                        }));
+                    }
+                });
+            }
+        })
+    })
+</script>
 </body>
 </html>

@@ -15,4 +15,6 @@ public interface PatientService {
     PatientDTO getById(Integer id);
 
     List<PatientDTO> getPatientByLastName(String name);
+
+    List <PatientDTO> getByLikeName (String name);
 }

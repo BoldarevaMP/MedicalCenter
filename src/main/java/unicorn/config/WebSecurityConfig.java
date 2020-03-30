@@ -51,8 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/**").permitAll()
-                .anyRequest().permitAll()
+                .antMatchers("/login", "/registration").permitAll()
+                .antMatchers("/login", "/registration", "/event/**").access("hasRole('ROLE_NURSE')")
+                .antMatchers("/login", "/registration", "/patient/**").access("hasRole('ROLE_DOCTOR')")
                 .and()
                 .formLogin().loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("email")

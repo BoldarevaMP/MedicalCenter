@@ -7,4 +7,6 @@ import java.util.List;
 public interface PatientDAO extends GenericDAO<Patient> {
 
     List<Patient> getPatientByLastName(String name);
+
+    List<Patient> getByLikeName (String name);
 }

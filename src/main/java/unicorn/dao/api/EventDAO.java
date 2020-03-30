@@ -15,5 +15,7 @@ public interface EventDAO extends GenericDAO<Event> {
 
     List<Event> getAllPlanned();
 
+    List<Event> getAllSorted();
+
 
 }

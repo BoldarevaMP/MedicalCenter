@@ -72,6 +72,14 @@
             </div>
         </spring:bind>
 
+        <spring:bind path="identKey">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" id="IdentKey" path="identKey" class="form-control"
+                            placeholder="Identification key"></form:input>
+                <form:errors path="identKey"></form:errors>
+            </div>
+        </spring:bind>
+
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>
@@ -88,8 +96,9 @@
         let email = document.getElementById("Email").value;
         let password = document.getElementById("Password").value;
         let confirmPassword = document.getElementById("ConfirmPassword").value;
+        let identKey = document.getElementById("IdentKey").value;
 
-        var regexp = "^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$";
+        let regexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
         if (firstName === "" || firstName.length < 1) {
             swal("Please enter your 'firstname', length must be over 1 symbol");
@@ -99,20 +108,24 @@
             swal("Please enter your 'lastname', length must be over 1 symbol");
             return false;
         }
-        if(email.length < 5 || regexp.test(String(email).toLowerCase())){
+        if(!regexp.test(String(email))){
             swal("Invalid form email");
             return false;
         }
         if (password === "" || password.length < 8) {
-            swal("Please enter your 'password', length must be over 4 symbol");
+            swal("Please enter your 'password', length must be over 8 symbol");
             return false;
         }
         if (confirmPassword === "" || confirmPassword.length < 8) {
-            swal("Please enter your 'confirm password', length must be over 4 symbol");
+            swal("Please enter your 'confirm password', length must be over 8 symbol");
             return false;
         }
         if (password !== confirmPassword) {
             swal("Password doesn't match");
+            return false;
+        }
+        if (identKey === "" || identKey.length < 4) {
+            swal("Please enter your Identification key");
             return false;
         }
     }

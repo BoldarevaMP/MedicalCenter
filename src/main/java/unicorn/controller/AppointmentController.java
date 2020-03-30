@@ -16,6 +16,7 @@ import unicorn.service.api.TreatmentService;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+
 @Controller
 public class AppointmentController {
 
@@ -25,13 +26,13 @@ public class AppointmentController {
     @Autowired
     private TreatmentService treatmentService;
 
-    @RequestMapping(value = {"/addAppointment"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/patient/addAppointment"}, method = RequestMethod.GET)
     public String addAppointment(ModelMap model) {
         model.addAttribute("appointment", new AppointmentDTO());
         return "appointment";
     }
 
-    @RequestMapping(value = "/addAppointment", method = RequestMethod.POST)
+    @RequestMapping(value = "/patient/addAppointment", method = RequestMethod.POST)
     public String addAppointment(@ModelAttribute("appointment") AppointmentDTO appointment,
                                BindingResult bindingResult, Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {

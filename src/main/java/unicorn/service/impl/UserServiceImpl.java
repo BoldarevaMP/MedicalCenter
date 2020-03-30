@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import unicorn.dao.api.UserDAO;
 import unicorn.dto.UserDTO;
 import unicorn.entity.User;
+import unicorn.entity.enums.Role;
 import unicorn.service.api.UserService;
 
 @Service
@@ -28,6 +29,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void create(UserDTO userDTO) {
+        if(userDTO.getIdentKey().equals("Doctor2020")){
+            userDTO.setRole(Role.ROLE_DOCTOR);
+        } else if (userDTO.getIdentKey().equals("Nurse2020")){
+            userDTO.setRole(Role.ROLE_NURSE);
+        }
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         userDAO.create(mapper.map(userDTO, User.class));
     }

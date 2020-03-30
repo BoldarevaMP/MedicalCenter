@@ -22,13 +22,20 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         UserDTO userDTO = (UserDTO) o;
 
-
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "Required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "Required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
+
         if (userService.getUserByEmail(userDTO.getEmail()) != null) {
             errors.rejectValue("email", "Duplicate.userForm.email");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
+        EmailValidator emailValidator = new EmailValidator();
+        if (!emailValidator.validate(userDTO.getEmail())) {
+            errors.rejectValue("email", "Invalid.userForm.email");
+        }
+
         if (userDTO.getPassword().length() < 8 || userDTO.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         }
@@ -37,5 +44,8 @@ public class UserValidator implements Validator {
             errors.rejectValue("confirmPassword", "Different.userForm.password");
         }
 
+        if (!userDTO.getIdentKey().equals("Doctor2020") && !userDTO.getIdentKey().equals("Nurse2020")){
+            errors.rejectValue("identKey","Check.userForm.identKey");
+        }
     }
 }

@@ -116,4 +116,11 @@ public class PatientServiceImpl implements PatientService {
         return list.stream().map(patient -> mapper.map(patient, PatientDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List <PatientDTO> getByLikeName(String name) {
+        List<Patient> list = patientDAO.getByLikeName(name);
+        return list.stream().map(patient -> mapper.map(patient, PatientDTO.class))
+                .collect(Collectors.toList());
+    }
 }

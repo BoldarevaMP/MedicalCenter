@@ -29,13 +29,17 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    @Size(min = 4, max = 16, message = "Field must be between 4 and 16 characters.")
+    @Size(min = 8, max = 32, message = "Field must be between 4 and 16 characters.")
     private String password;
 
     @NotNull
-    @Size(min = 4, max = 16, message = "Field must be between 4 and 16 characters.")
+    @Size(min = 8, max = 32, message = "Field must be between 4 and 16 characters.")
     @Transient
     private String confirmPassword;
 
-    private Role role = Role.ROLE_DOCTOR;
+    private Role role;
+
+    @NotNull
+    @Transient
+    private String identKey;
 }

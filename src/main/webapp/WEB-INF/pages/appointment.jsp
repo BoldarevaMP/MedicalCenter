@@ -6,9 +6,9 @@
 <html>
 <head>
     <title>Edit Event</title>
-    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
 </head>
 <body>
 
@@ -123,7 +123,7 @@
         <div class="row">
             <div class="form-actions floatLeft">
                 <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
-                <button class="btn btn-warning"><a href="<c:url value='/addAppointment'/>">Cancel</a></button>
+                <button class="btn btn-warning"><a href="<c:url value='/patient/addAppointment'/>">Cancel</a></button>
             </div>
         </div>
     </form:form>

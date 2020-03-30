@@ -17,6 +17,7 @@ import unicorn.entity.Event;
 import unicorn.service.api.EventService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -61,7 +62,7 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     @Override
     public List<EventDTO> getAll() {
-        List<Event> eventList = eventDAO.getAll();
+        List<Event> eventList = eventDAO.getAllSorted();
         List<EventDTO> eventDTOList = new ArrayList<>();
         for (int i = 0; i < eventList.size(); i++) {
             EventDTO eventDTO = new EventDTO();
@@ -78,7 +79,9 @@ public class EventServiceImpl implements EventService {
             appointmentDTO.setPatientDTO(modelMapper.map(appointment.getPatient(), PatientDTO.class));
             eventDTO.setAppointmentDTO(appointmentDTO);
             eventDTOList.add(eventDTO);
+
         }
+
         return eventDTOList;
     }
 

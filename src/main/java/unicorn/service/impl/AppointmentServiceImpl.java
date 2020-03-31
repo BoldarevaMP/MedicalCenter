@@ -45,6 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(AppointmentDTO appointmentDTO) {
+        if(appointmentDTO.getDosage()<0) throw new RuntimeException("ATATA");
         List<LocalDate> dates = getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(), appointmentDTO.getEndDate(), appointmentDTO.getDays());
         List<LocalDateTime> datesWithTime = setTimeToDates(dates, appointmentDTO.getTime());
 

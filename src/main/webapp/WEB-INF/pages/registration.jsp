@@ -33,7 +33,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" onsubmit="return(validate());">
-        <h2 class="form-signin-heading">Create your account</h2>
+        <h2 class="form-signin-heading">Sign Up</h2>
 
         <spring:bind path="firstName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -82,7 +82,9 @@
 
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <h4 class="text-center"><a href="${contextPath}/login">Sign In</a></h4>
     </form:form>
+
 
 </div>
 <!-- /container -->

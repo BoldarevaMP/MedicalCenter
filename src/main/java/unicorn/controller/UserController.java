@@ -40,7 +40,7 @@ public class UserController {
             return "registration";
         }
         userService.create(userForm);
-        return "redirect:/welcome";
+        return "redirect:/login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

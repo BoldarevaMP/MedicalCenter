@@ -33,7 +33,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin" onsubmit="return(validate());">
-        <h2 class="form-signin-heading">Sign Up</h2>
+        <h2 class="text-center">Sign Up</h2>
 
         <spring:bind path="firstName">
             <div class="form-group ${status.error ? 'has-error' : ''}">

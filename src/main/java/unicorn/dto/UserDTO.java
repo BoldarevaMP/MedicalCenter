@@ -29,17 +29,18 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    @Size(min = 8, max = 32, message = "Field must be between 4 and 16 characters.")
+    @Size(min = 8, max = 32, message = "Field must be between 8 and 32 characters.")
     private String password;
 
     @NotNull
-    @Size(min = 8, max = 32, message = "Field must be between 4 and 16 characters.")
+    @Size(min = 8, max = 32, message = "Field must be between 8 and 32 characters.")
     @Transient
     private String confirmPassword;
 
-    private Role role;
-
     @NotNull
     @Transient
+    @Size(min = 9, max = 10, message = "Field must be 9 or 10 characters.")
     private String identKey;
+
+    private Role role;
 }

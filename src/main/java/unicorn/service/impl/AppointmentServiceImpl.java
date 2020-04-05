@@ -1,12 +1,15 @@
 package unicorn.service.impl;
 
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import unicorn.converter.AppointmentCorverter;
 import unicorn.dao.api.AppointmentDAO;
 import unicorn.dao.api.EventDAO;
+import unicorn.dao.api.PatientDAO;
 import unicorn.dao.api.TreatmentDAO;
 import unicorn.dto.AppointmentDTO;
 import unicorn.dto.PatientDTO;
@@ -15,20 +18,24 @@ import unicorn.entity.Appointment;
 import unicorn.entity.Event;
 import unicorn.entity.Patient;
 import unicorn.entity.Treatment;
+import unicorn.entity.enums.AppointmentStatus;
 import unicorn.entity.enums.DaysOfWeek;
 import unicorn.entity.enums.EventStatus;
 import unicorn.entity.enums.TimeOfTheDay;
 import unicorn.service.api.AppointmentService;
+import unicorn.service.api.PatientService;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+
+    private static final Logger logger = Logger.getLogger(AppointmentServiceImpl.class);
 
     @Autowired
     private ModelMapper mapper;
@@ -42,35 +49,61 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private TreatmentDAO treatmentDAO;
 
+    @Autowired
+    private PatientDAO patientDAO;
+
+    @Autowired
+    private PatientService patientService;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(AppointmentDTO appointmentDTO) {
-        if(appointmentDTO.getDosage()<0) throw new RuntimeException("ATATA");
-        List<LocalDate> dates = getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(), appointmentDTO.getEndDate(), appointmentDTO.getDays());
+        List<LocalDate> dates = getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(), appointmentDTO.getEndDate(),
+                appointmentDTO.getDays());
+
         List<LocalDateTime> datesWithTime = setTimeToDates(dates, appointmentDTO.getTime());
 
         Appointment appointment = new Appointment();
-        appointment.setId(appointmentDTO.getId());
-        appointment.setStartDate(appointmentDTO.getStartDate());
-        appointment.setEndDate(appointmentDTO.getEndDate());
-        appointment.setDosage(appointmentDTO.getDosage());
-        appointment.setDays(appointmentDTO.getDays());
-        appointment.setTime(appointmentDTO.getTime());
-        appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDTO().getName()));
+        appointmentDTO.setStatus(AppointmentStatus.ACTIVE);
+        AppointmentCorverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
+        appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
         appointment.setPatient(mapper.map(appointmentDTO.getPatientDTO(), Patient.class));
         appointmentDAO.create(appointment);
-
-        List<Event> eventList = new ArrayList<>();
-        for (int i = 0; i < datesWithTime.size(); i++) {
-            Event event = new Event();
-            event.setDate(datesWithTime.get(i));
-            event.setStatus(EventStatus.PLANNED);
-            event.setAppointment(appointment);
-            eventList.add(event);
-            eventDAO.create(event);
-        }
-        appointment.setEventList(eventList);
+        appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
+        logger.info("Appointment is created.");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(AppointmentDTO appointmentDTO) {
+        Patient patient = patientDAO.getById(appointmentDTO.getPatientDtoId());
+        List<Event> eventListOld = eventDAO.getPlannedEventsByAppointmentId(appointmentDTO.getId());
+        changeEventsStatusToCancelledByDoctor(eventListOld);
+        patientService.changePatientStatusToDischarge(patient);
+
+        List<LocalDate> dates = getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(), appointmentDTO.getEndDate(),
+                appointmentDTO.getDays());
+        List<LocalDateTime> datesWithTime = setTimeToDates(dates, appointmentDTO.getTime());
+        Appointment appointment = appointmentDAO.getById(appointmentDTO.getId());
+        AppointmentCorverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
+        appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
+        appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
+        appointmentDAO.update(appointment);
+        logger.info("Appointment is updated.");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void changeStatusToCancelledById(Integer id) {
+        List<Event> eventList = eventDAO.getPlannedEventsByAppointmentId(id);
+        changeEventsStatusToCancelledByDoctor(eventList);
+        Appointment appointment = appointmentDAO.getById(id);
+        Patient patient = patientDAO.getById(appointment.getPatientId());
+        appointment.setStatus(AppointmentStatus.CANCELLED);
+        appointmentDAO.update(appointment);
+        patientService.changePatientStatusToDischarge(patient);
+        logger.info("Appointment is deleted.");
     }
 
     @Override
@@ -78,8 +111,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentDTO getById(Integer id) {
         Appointment appointment = appointmentDAO.getById(id);
         AppointmentDTO appointmentDTO = new AppointmentDTO();
-        appointmentDTO.setId(appointment.getId());
-        appointmentDTO.setDosage(appointment.getDosage());
+        AppointmentCorverter.converterAppointmentToAppointmentDTO(appointment, appointmentDTO);
         appointmentDTO.setPatientDTO(mapper.map(appointment.getPatient(), PatientDTO.class));
         appointmentDTO.setTreatmentDTO(mapper.map(appointment.getTreatment(), TreatmentDTO.class));
         return appointmentDTO;
@@ -87,49 +119,32 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AppointmentDTO> getByPatientId(Integer id) {
-        List<Appointment> appointmentList = appointmentDAO.getByPatientId(id);
-        List<AppointmentDTO> appointmentDTOList = new ArrayList<>();
-        for (int i = 0; i < appointmentList.size(); i++) {
-            AppointmentDTO appointmentDTO = new AppointmentDTO();
-            appointmentDTO.setId(appointmentList.get(i).getId());
-            appointmentDTO.setStartDate(appointmentList.get(i).getStartDate());
-            appointmentDTO.setEndDate(appointmentList.get(i).getEndDate());
-            appointmentDTO.setDosage(appointmentList.get(i).getDosage());
-            appointmentDTO.setDays(appointmentList.get(i).getDays());
-            appointmentDTO.setTime(appointmentList.get(i).getTime());
-            appointmentDTO.setPatientDTO(mapper.map(appointmentList.get(i).getPatient(), PatientDTO.class));
-            appointmentDTO.setTreatmentDTO(mapper.map(appointmentList.get(i).getTreatment(), TreatmentDTO.class));
-            appointmentDTOList.add(appointmentDTO);
-        }
-
-        return appointmentDTOList;
-
+    public List<TreatmentDTO> getTreatmentByLikeNames(String name) {
+        List<Treatment> treatmentList = treatmentDAO.getByLikeName(name);
+        return treatmentList.stream().map(treatment -> mapper.map(treatment, TreatmentDTO.class))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteById(Integer id) {
-        appointmentDAO.delete(appointmentDAO.getById(id));
-    }
+    public List<LocalDate> getDatesBetweenStartAndEnd(LocalDate startDate, LocalDate endDate, List<DaysOfWeek> days) {
 
-    private List<LocalDate> getDatesBetweenStartAndEnd(LocalDate startDate, LocalDate endDate, List<DaysOfWeek> days) {
+        int daysInWeek = 7;
 
         List<LocalDate> daysInRange = new ArrayList<LocalDate>();
 
         DayOfWeek dowOfStart = startDate.getDayOfWeek();
         for (DaysOfWeek day : days) {
-
             int difference = getDayOfWeek(day).getValue() - dowOfStart.getValue();
-            if (difference < 0) difference += 7;
+            if (difference < 0) {
+                difference += daysInWeek;
+            }
 
             LocalDate currentDay = startDate.plusDays(difference);
-            do {
+            while ((currentDay.isEqual(startDate) || currentDay.isAfter(startDate))
+                    && (currentDay.isBefore(endDate) || currentDay.isEqual(endDate))) {
                 daysInRange.add(currentDay);
-                currentDay = currentDay.plusDays(7);
-            } while (currentDay.isBefore(endDate) || currentDay.isEqual(endDate));
+                currentDay = currentDay.plusDays(daysInWeek);
+            }
         }
-
         return daysInRange;
     }
 
@@ -173,5 +188,29 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
         return dates;
+    }
+
+    private List<Event> createEventsOfAppointment(List<LocalDateTime> datesWithTime, Appointment appointment) {
+        List<Event> eventList = new ArrayList<>();
+        for (int i = 0; i < datesWithTime.size(); i++) {
+            Event event = new Event();
+            event.setDate(datesWithTime.get(i));
+            event.setStatus(EventStatus.PLANNED);
+            event.setAppointment(appointment);
+            eventDAO.create(event);
+            eventList.add(event);
+        }
+        logger.info("Events of appointment are created.");
+        return eventList;
+
+    }
+
+    private void changeEventsStatusToCancelledByDoctor(List<Event> eventList) {
+        for (Event event : eventList) {
+            event.setStatus(EventStatus.CANCELLED);
+            event.setComment("by Doctor");
+            eventDAO.update(event);
+        }
+        logger.info("Events are cancelled by doctor.");
     }
 }

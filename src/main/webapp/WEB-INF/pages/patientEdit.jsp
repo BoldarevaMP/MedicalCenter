@@ -17,7 +17,9 @@
     </sec:authorize>
 </div>
 <div class="generic-container ">
-    <div class="well lead">Patient Form</div>
+    <div class="well">
+        <button class="btn"><a href="<c:url value="/patient/list"/>">All Patients</a></button>
+    </div>
 
     <div class="well">
 
@@ -67,7 +69,7 @@
                         ${time.toString()}
                     </c:forEach>
                 </td>
-                <td><a href="<c:url value="/patient/edit-patient-${patient.id}/appointment-${appointment.id}" />" class="btn btn-success custom-width">edit</a></td>
+                <td><a href="<c:url value="/patient/edit-appointment-${appointment.id}" />" class="btn btn-success custom-width">edit</a></td>
                 <td><a href="<c:url value="/patient/delete-appointment-${appointment.id}" />" class="btn btn-danger custom-width">delete</a></td>
             </tr>
         </c:forEach>
@@ -76,9 +78,6 @@
 </div>
 
 
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-<script type="text/javascript">
 
-</script>
 </body>
 </html>

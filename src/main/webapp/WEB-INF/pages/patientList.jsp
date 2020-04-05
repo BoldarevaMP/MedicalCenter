@@ -50,7 +50,14 @@
                     <td>${patient.diagnosis}</td>
                     <td>${patient.status}</td>
                     <td>${patient.doctorDTO.lastName}</td>
-                    <td><a href="<c:url value="/patient/edit-patient-${patient.id}" />" class="btn btn-success custom-width">edit</a></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${patient.status =='TREATED'}">
+                                <a href="<c:url value="/patient/edit-patient-${patient.id}" />" class="btn btn-success custom-width">edit</a>
+                            </c:when>
+                        </c:choose>
+
+                        </td>
 
                 </tr>
             </c:forEach>

@@ -3,7 +3,6 @@ package unicorn.dao.impl;
 import org.springframework.stereotype.Repository;
 import unicorn.dao.api.TreatmentDAO;
 import unicorn.entity.Treatment;
-import unicorn.entity.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -31,7 +30,7 @@ public class TreatmentDAOImpl extends GenericDAOImpl<Treatment> implements Treat
         Root<Treatment> treatmentRoot = criteriaQuery.from(Treatment.class);
 
         if (name != null) {
-            criteriaQuery.where(entityManager.getCriteriaBuilder().like(treatmentRoot.get("name"), "%"+name+"%"));
+            criteriaQuery.where(entityManager.getCriteriaBuilder().like(treatmentRoot.get("name"), "%" + name + "%"));
         }
         List<Treatment> list = entityManager.createQuery(criteriaQuery).getResultList();
         return list;

@@ -38,4 +38,8 @@ public class Event {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
+
+    public Integer getPatientId() {
+        return getAppointment().getPatient().getId();
+    }
 }

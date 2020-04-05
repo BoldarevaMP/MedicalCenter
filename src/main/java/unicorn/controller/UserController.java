@@ -16,6 +16,7 @@ import unicorn.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") UserDTO userForm, BindingResult bindingResult) {
+    public String registration(@Valid @ModelAttribute("userForm") UserDTO userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -65,8 +66,8 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
     public String welcome(Model model) {
-        return "welcome";
+        return "error/403";
     }
 }

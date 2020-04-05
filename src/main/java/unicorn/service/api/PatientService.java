@@ -1,5 +1,6 @@
 package unicorn.service.api;
 
+import unicorn.dto.AppointmentDTO;
 import unicorn.dto.PatientDTO;
 import unicorn.entity.Patient;
 
@@ -14,7 +15,8 @@ public interface PatientService {
 
     PatientDTO getById(Integer id);
 
-    List<PatientDTO> getPatientByLastName(String name);
+    void changePatientStatusToDischarge(Patient patient);
 
-    List <PatientDTO> getByLikeName (String name);
+    List<AppointmentDTO> getAppointmentsByPatientId(Integer id);
+
 }

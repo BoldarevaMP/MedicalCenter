@@ -31,14 +31,18 @@
     </div>
     <form:form method="POST" modelAttribute="event" class="form--horizontal ">
         <form:input type="hidden" path="id" id="id"/>
-
+        <form:input type="hidden" path="date" id="date"/>
+        <form:input type="hidden" path="appointmentDTO.patientDTO.lastName" id="patientLastName"/>
+        <form:input type="hidden" path="appointmentDTO.patientDTO.firstName" id="patientFirstName"/>
+        <form:input type="hidden" path="appointmentDTO.treatmentDTO.name" id="treatmentName"/>
+        <form:input type="hidden" path="appointmentDTO.dosage" id="dosage"/>
         <div class="row">
             <div class="form-group col-md-12">
                 <div class="col-md-7">
                     <form:select type="text" id="status" path="status" class="form-control ">
-                                <option selected value="PLANNED">PLANNED</option>
-                                <option value="DONE">DONE</option>
-                                <option value="CANCELLED">CANCELLED</option>
+                                <form:option value="PLANNED">PLANNED</form:option>
+                                <form:option value="DONE">DONE</form:option>
+                                <form:option value="CANCELLED">CANCELLED</form:option>
                     </form:select>
                     <div class="has-error">
                         <form:errors path="status" class="help-inline"/>

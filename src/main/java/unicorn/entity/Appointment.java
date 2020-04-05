@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import unicorn.entity.enums.AppointmentStatus;
 import unicorn.entity.enums.DaysOfWeek;
 import unicorn.entity.enums.TimeOfTheDay;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -49,6 +49,10 @@ public class Appointment {
     @Column(name = "dosage")
     private Integer dosage;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private AppointmentStatus status;
+
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
@@ -57,7 +61,11 @@ public class Appointment {
     @JoinColumn(name = "treatment_id")
     private Treatment treatment;
 
-    @OneToMany(mappedBy = "appointment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "appointment")
     private List<Event> eventList;
+
+    public Integer getPatientId() {
+        return getPatient().getId();
+    }
 }
 

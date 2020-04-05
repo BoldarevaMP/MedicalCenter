@@ -8,7 +8,7 @@
 
 
 Hello!
-<sec:authorize access="hasRole('ROLE_NURSE')">
+<sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
     <p>Hi, ${pageContext.request.userPrincipal.name}  <a href="${contextPath}/logout">Log Out </a></p>
 </sec:authorize>
 </body>

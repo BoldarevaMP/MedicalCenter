@@ -5,7 +5,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <title>Edit Event</title>
+    <title>Edit Appointment</title>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
     <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
@@ -22,11 +22,13 @@
         <div class="row">
             <div class="form-group col-md-12">
 
+                <form:input type="hidden" path="patientDTO.id"/>
+                <form:input type="hidden" path="status"/>
                 <div class="col-md-6">
                     <span>Type of Treatment</span>
-                    <form:select type="text" id="treatmentDTO.type" path="treatmentDTO.type" class="form-control ">
-                        <option value="MEDICAL_PROCEDURE">MEDICAL PROCEDURE</option>
-                        <option value="MEDICINE">MEDICINE</option>
+                    <form:select id="treatmentDTO.type" path="treatmentDTO.type" class="form-control">
+                        <form:option value="MEDICAL_PROCEDURE">MEDICAL PROCEDURE</form:option>
+                        <form:option value="MEDICINE">MEDICINE</form:option>
                     </form:select>
                     <div class="has-error">
                         <form:errors path="treatmentDTO.type" class="help-inline"/>
@@ -47,7 +49,7 @@
 
                 <div class="col-md-6">
                     <span>Dosage</span>
-                    <form:input  type="text" id="dosage" path="dosage" class="form-control"/>
+                    <form:input  type="number" id="dosage" path="dosage" class="form-control"/>
                     <div class="has-error">
                         <form:errors path="dosage" class="help-inline"/>
                     </div>
@@ -74,7 +76,7 @@
                 </div>
             </div>
             <div class="form-group col-md-12">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <span>Day of Week</span>
                     <form:select type="text" id="days" multiple="true" path="days" class="form-control ">
                         <option value="MON">MONDAY</option>
@@ -89,7 +91,19 @@
                         <form:errors path="days" class="help-inline"/>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
+                    <c:choose>
+                    <c:when test="${edit}">
+                        <h4>Current Days Pattern:
+                            </br>
+                            <c:forEach items="${appointment.days}" var="day">
+                                ${day}
+                            </c:forEach>
+                        </h4>
+                    </c:when>
+                    </c:choose>
+                </div>
+                <div class="col-md-3">
                     <span>Time of Day</span>
                     <form:select type="text" id="days" multiple="true" path="time" class="form-control ">
                         <option value="AM_12">00:00</option>
@@ -118,16 +132,36 @@
                         <option value="PM_11">23:00</option>
                     </form:select>
                     <div class="has-error">
-                        <form:errors path="days" class="help-inline"/>
+                        <form:errors path="time" class="help-inline"/>
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <c:choose>
+                        <c:when test="${edit}">
+                            <h4>Current Times Pattern:
+                                </br>
+                                <c:forEach items="${appointment.time}" var="time">
+                                    ${time.toString()}
+                                </c:forEach>
+                            </h4>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="form-actions floatLeft">
-                <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
-                <button class="btn btn-warning"><a href="<c:url value='/patient/addAppointment'/>">Cancel</a></button>
+                <c:choose>
+                    <c:when test="${edit}">
+                        <button id="button" class="btn btn-success" type="submit">Update Appointment</button>
+                    </c:when>
+                    <c:otherwise>
+                        <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
+                    </c:otherwise>
+                </c:choose>
+
+                <button class="btn btn-warning"><a href="<c:url value='/patient/edit-patient-${appointment.patientDTO.id}'/>">Cancel</a></button>
             </div>
         </div>
     </form:form>

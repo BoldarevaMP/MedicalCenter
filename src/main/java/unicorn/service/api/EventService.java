@@ -2,6 +2,7 @@ package unicorn.service.api;
 
 
 import unicorn.dto.EventDTO;
+import unicorn.dto.PatientDTO;
 
 import java.util.List;
 
@@ -16,8 +17,6 @@ public interface EventService {
 
     void create(EventDTO eventDTO);
 
-    void delete(EventDTO eventDTO);
-
     List<EventDTO> getEventsByDateHour();
 
     List<EventDTO> getEventsByDateToday();
@@ -25,4 +24,8 @@ public interface EventService {
     List<EventDTO> getEventsByPatientId(Integer id);
 
     void updateStatusAndComment(EventDTO eventDTO);
+
+    List<PatientDTO> getPatientsByLastName(String name);
+
+    List<PatientDTO> getPatientsByLikeName(String name);
 }

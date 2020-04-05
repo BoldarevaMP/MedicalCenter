@@ -4,7 +4,7 @@ import unicorn.entity.Appointment;
 
 import java.util.List;
 
-public interface AppointmentDAO extends GenericDAO <Appointment>{
+public interface AppointmentDAO extends GenericDAO<Appointment> {
     List<Appointment> getByPatientId(Integer id);
 
 

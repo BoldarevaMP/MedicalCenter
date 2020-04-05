@@ -29,13 +29,14 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void create(UserDTO userDTO) {
-        if(userDTO.getIdentKey().equals("Doctor2020")){
+        if (userDTO.getIdentKey().equals("Doctor2020")) {
             userDTO.setRole(Role.ROLE_DOCTOR);
-        } else if (userDTO.getIdentKey().equals("Nurse2020")){
+        } else if (userDTO.getIdentKey().equals("Nurse2020")) {
             userDTO.setRole(Role.ROLE_NURSE);
         }
         userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         userDAO.create(mapper.map(userDTO, User.class));
+        logger.info("User is created.");
     }
 
     @Override
@@ -43,12 +44,7 @@ public class UserServiceImpl implements UserService {
     public void update(UserDTO userDTO) {
         User user = userDAO.getById(userDTO.getId());
         userDAO.update(mapper.map(userDTO, User.class));
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void delete(UserDTO userDTO) {
-        userDAO.delete(mapper.map(userDTO, User.class));
+        logger.info("User is updated.");
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

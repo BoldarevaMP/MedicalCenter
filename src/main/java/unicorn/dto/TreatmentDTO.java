@@ -2,7 +2,7 @@ package unicorn.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.validator.constraints.NotBlank;
 import unicorn.entity.enums.TreatmentDosageForm;
 import unicorn.entity.enums.TreatmentType;
 
@@ -10,12 +10,10 @@ import unicorn.entity.enums.TreatmentType;
 @NoArgsConstructor
 public class TreatmentDTO {
     private Integer id;
+
+    @NotBlank
     private String name;
     private TreatmentType type;
     private TreatmentDosageForm dosageForm;
 
-    public TreatmentDTO(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

@@ -46,7 +46,7 @@
         <div class="row">
             <div class="form-group col-md-12">
                 <div class="col-md-7">
-                    <form:input type="text" id="healthInsurance" path="healthInsurance" class="form-control" placeHolder="Health Insurance"/>
+                    <form:input type="number" id="healthInsurance" path="healthInsurance" class="form-control" placeHolder="Health Insurance"/>
                     <div class="has-error">
                         <form:errors path="healthInsurance" class="help-inline"/>
                     </div>
@@ -97,18 +97,6 @@
             </div>
         </div>
     </form:form>
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 <script type="text/javascript">

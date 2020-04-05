@@ -26,9 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     public ModelMapper mapper;
 
-    @Autowired
-    private UserService userService;
-
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
@@ -38,7 +35,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             UserDTO userDTO = mapper.map(user, UserDTO.class);
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
             grantedAuthorities.add(new SimpleGrantedAuthority(userDTO.getRole().toString()));
-            return new org.springframework.security.core.userdetails.User(userDTO.getEmail(), userDTO.getPassword(), grantedAuthorities);
+            return new org.springframework.security.core.userdetails.User(userDTO.getEmail(), userDTO.getPassword(),
+                    grantedAuthorities);
         } else {
             throw new UsernameNotFoundException("User is not found.");
         }

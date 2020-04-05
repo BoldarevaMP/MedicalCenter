@@ -18,7 +18,7 @@ public abstract class GenericDAOImpl<Entity> implements GenericDAO<Entity> {
     protected Class<Entity> daoClass;
 
     public GenericDAOImpl() {
-        daoClass = (Class<Entity>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        daoClass = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     @Override
@@ -29,15 +29,6 @@ public abstract class GenericDAOImpl<Entity> implements GenericDAO<Entity> {
     @Override
     public void update(Entity entity) {
         entityManager.merge(entity);
-    }
-
-    @Override
-    public void delete(Entity entity) {
-        if (entityManager.contains(entity)){
-            entityManager.remove(entity);
-        } else {
-            entityManager.remove(entityManager.merge(entity));
-        }
     }
 
     @Override

@@ -2,8 +2,8 @@ package unicorn.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import unicorn.dao.api.PatientDAO;
+import unicorn.entity.Event;
 import unicorn.entity.Patient;
-import unicorn.entity.Treatment;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,6 +12,13 @@ import java.util.List;
 
 @Repository
 public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDAO {
+
+    @Override
+    public List<Patient> getAllSorted() {
+        List<Patient> list = entityManager.createNativeQuery("SELECT * FROM patients ORDER BY startDate DESC",
+                Patient.class).getResultList();
+        return list;
+    }
 
     @Override
     public List<Patient> getPatientByLastName(String name) {
@@ -32,11 +39,13 @@ public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDA
         Root<Patient> patientRoot = criteriaQuery.from(Patient.class);
 
         if (name != null) {
-            criteriaQuery.where(entityManager.getCriteriaBuilder().like(patientRoot.get("lastName"), "%"+name+"%"));
+            criteriaQuery.where(entityManager.getCriteriaBuilder().like(patientRoot.get("lastName"), "%" + name + "%"));
         }
         List<Patient> list = entityManager.createQuery(criteriaQuery).getResultList();
         return list;
     }
-    }
+
+
+}
 
 

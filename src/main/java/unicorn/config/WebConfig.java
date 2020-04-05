@@ -19,7 +19,7 @@ import unicorn.service.impl.UserDetailsServiceImpl;
 public class WebConfig implements WebMvcConfigurer {
 
     @Bean
-    ViewResolver viewResolver(){
+    ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/pages/");
         viewResolver.setSuffix(".jsp");
@@ -35,14 +35,14 @@ public class WebConfig implements WebMvcConfigurer {
 
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
     }
 
     @Bean
-    public MessageSource messageSource(){
-        ReloadableResourceBundleMessageSource reloadableResourceBundleMessageSource =  new ReloadableResourceBundleMessageSource();
-        reloadableResourceBundleMessageSource.setBasenames(new String[]{"classpath:messages","classpath:messages_ru","classpath:messages_en"});
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource reloadableResourceBundleMessageSource = new ReloadableResourceBundleMessageSource();
+        reloadableResourceBundleMessageSource.setBasenames(new String[]{"classpath:messages_en"});
         reloadableResourceBundleMessageSource.setDefaultEncoding("UTF-8");
         return reloadableResourceBundleMessageSource;
     }

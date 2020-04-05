@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @ComponentScan("unicorn")
 @EnableWebSecurity
@@ -31,6 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+    @Autowired
+    public WebSecurityConfig(AuthenticationSuccessHandler authenticationSuccessHandler) {
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+    }
+
+    @Autowired
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -52,16 +61,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login", "/registration").permitAll()
-                .antMatchers( "/event/**").hasRole("NURSE")
-                .antMatchers( "/patient/**").hasRole("DOCTOR")
+                .antMatchers("/event/**").hasRole("NURSE")
+                .antMatchers("/patient/**").hasRole("DOCTOR")
                 .and()
                 .formLogin().loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/welcome")
+                .successHandler(authenticationSuccessHandler)
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/login").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/403")
                 .and()
                 .csrf().disable();
     }

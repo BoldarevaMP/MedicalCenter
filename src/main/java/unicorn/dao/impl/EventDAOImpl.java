@@ -1,15 +1,10 @@
 package unicorn.dao.impl;
 
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import unicorn.dao.api.EventDAO;
 import unicorn.entity.Event;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,29 +14,23 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
 
     @Override
     public List<Event> getEventsByDateToday() {
-        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE DATE(date) = CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day'", Event.class).getResultList();
-        if (list.isEmpty()) {
-            return new ArrayList<>();
-        } else {
-            return list;
-        }
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE DATE(date) = " +
+                "CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day'", Event.class).getResultList();
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 
     @Override
     public List<Event> getEventsByDateHour() {
-        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW() AND date < (NOW() + INTERVAL '1 hour')", Event.class).getResultList();
-        if (list.isEmpty()) {
-            return new ArrayList<>();
-        } else {
-            return list;
-        }
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW() " +
+                "AND date < (NOW() + INTERVAL '1 hour')", Event.class).getResultList();
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 
     @Override
     public List<Event> getAllPlanned() {
         TypedQuery<Event> query = entityManager.createQuery("FROM Event WHERE status LIKE 'PLANNED'", Event.class);
         List<Event> list = query.getResultList();
-        return list.isEmpty()?new ArrayList<>():list;
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 
     @Override
@@ -51,12 +40,20 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
                 "ON events.appointment_id = a.id\n" +
                 "WHERE a.patient_id =   :patId", Event.class).setParameter("patId", patId).getResultList();
 
-        return list.isEmpty()? null:list;
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 
     @Override
     public List<Event> getAllSorted() {
-        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events ORDER BY date", Event.class).getResultList();
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events ORDER BY date", Event.class)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public List<Event> getPlannedEventsByAppointmentId(Integer id) {
+        List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE appointment_id = :id " +
+                "AND status LIKE 'PLANNED'", Event.class).setParameter("id", id).getResultList();
         return list;
     }
 }

@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import unicorn.entity.enums.AppointmentStatus;
 import unicorn.entity.enums.DaysOfWeek;
 import unicorn.entity.enums.TimeOfTheDay;
+import unicorn.entity.enums.TreatmentType;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -33,8 +34,22 @@ public class AppointmentDTO {
 
     private Integer dosage;
 
+    private AppointmentStatus status;
+
     private PatientDTO patientDTO;
 
     private TreatmentDTO treatmentDTO;
 
+
+    public String getTreatmentDtoName() {
+        return getTreatmentDTO().getName();
+    }
+
+    public Integer getPatientDtoId() {
+        return getPatientDTO().getId();
+    }
+
+    public TreatmentType getTreatmentType() {
+        return getTreatmentDTO().getType();
+    }
 }

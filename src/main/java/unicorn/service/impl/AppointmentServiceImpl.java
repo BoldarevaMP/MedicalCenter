@@ -22,6 +22,7 @@ import unicorn.entity.enums.AppointmentStatus;
 import unicorn.entity.enums.DaysOfWeek;
 import unicorn.entity.enums.EventStatus;
 import unicorn.entity.enums.TimeOfTheDay;
+import unicorn.message.MessageSender;
 import unicorn.service.api.AppointmentService;
 import unicorn.service.api.PatientService;
 
@@ -55,6 +56,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private MessageSender messageSender;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(AppointmentDTO appointmentDTO) {
@@ -71,6 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDAO.create(appointment);
         appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
+        messageSender.send("Update");
         logger.info("Appointment is created.");
     }
 
@@ -90,6 +95,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
         appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
+        messageSender.send("Update");
         logger.info("Appointment is updated.");
     }
 
@@ -103,6 +109,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(AppointmentStatus.CANCELLED);
         appointmentDAO.update(appointment);
         patientService.changePatientStatusToDischarge(patient);
+        messageSender.send("Update");
         logger.info("Appointment is deleted.");
     }
 

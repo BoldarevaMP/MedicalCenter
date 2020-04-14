@@ -49,7 +49,6 @@ public class EventServiceImpl implements EventService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(EventDTO eventDTO) {
         eventDAO.create(mapper.map(eventDTO, Event.class));
-        messageSender.send("Message is sent.");
         logger.info("Event is created.");
     }
 
@@ -59,6 +58,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventDAO.getById(eventDTO.getId());
         if (event != null) {
             eventDAO.update(mapper.map(eventDTO, Event.class));
+            messageSender.send("Update");
             logger.info("Event is updated.");
         }
     }
@@ -71,8 +71,9 @@ public class EventServiceImpl implements EventService {
         event.setStatus(eventDTO.getStatus());
         event.setComment(eventDTO.getComment());
         eventDAO.update(event);
-        logger.info("Event is updated by nurse.");
         patientService.changePatientStatusToDischarge(patient);
+        messageSender.send("Update");
+        logger.info("Event is updated by nurse.");
     }
 
     @Override

@@ -19,6 +19,4 @@ public interface EventDAO extends GenericDAO<Event> {
     List<Event> getAllSorted();
 
     List<Event> getPlannedEventsByAppointmentId(Integer id);
-
-
 }

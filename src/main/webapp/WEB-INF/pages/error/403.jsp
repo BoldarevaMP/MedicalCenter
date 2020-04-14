@@ -21,10 +21,10 @@
             <div class="lock-screen">
                 <h1><span class="color">Access denied</span><br><span class="color">Sorry, but you don't have enough rights :(</span><br/></h1>
                     <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                        <h3><a href="<c:url value="${contextPath}/patient/list"/>">Back to ----> the list of patients</a></h3>
+                        <h3><a href="<c:url value="/patient/list"/>">Back to ----> the list of patients</a></h3>
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_NURSE')">
-                        <h3><a href="<c:url value="${contextPath}/event/list/all"/>">Back to ----> the list of events</a></h3>
+                        <h3><a href="<c:url value="/event/list/all"/>">Back to ----> the list of events</a></h3>
                     </sec:authorize>
             </div>
         </div>

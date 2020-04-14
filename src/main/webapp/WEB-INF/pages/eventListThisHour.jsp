@@ -17,14 +17,14 @@
 </head>
 
 <body>
-<div class="well">
+<div class="well-sm">
     <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="${contextPath}/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container">
     <div class="well">
-        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Events</button>
+        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Events</a></button>
         <button class="btn"><a href="<c:url value="/event/list/today"/>">Today Events</a></button>
         <button class="btn"><a href="<c:url value="/event/list/thishour"/>">This Hour Events</a></button>
     </div>
@@ -50,6 +50,13 @@
 
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">List of Events </span></div>
+        <jsp:useBean id="events" scope="request" type="org.springframework.beans.support.PagedListHolder" />
+        <c:url value="/event/list/thishour" var="pagedLink">
+            <c:param name="p" value="ptag"/>
+        </c:url>
+        <div style="margin-left: 20px">
+            <tg:paging pagedListHolder="${events}" pagedLink="${pagedLink}" />
+        </div>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -63,7 +70,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${events}" var="event">
+            <c:forEach items="${events.pageList}" var="event">
                 <tr>
                     <td>${event.date}</td>
                     <td>${event.appointmentDTO.patientDTO.lastName} ${event.appointmentDTO.patientDTO.firstName}</td>

@@ -11,8 +11,8 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = Logger.getLogger(EventServiceImpl.class);
 
-    @ExceptionHandler({UnicornValidationException.class})
-    public ModelAndView handleRuntimeException(UnicornValidationException ex) {
+    @ExceptionHandler({Exception.class})
+    public ModelAndView handleRuntimeException(Exception ex) {
         logger.error("Exception!" + ex.getMessage());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error/exceptionPage");

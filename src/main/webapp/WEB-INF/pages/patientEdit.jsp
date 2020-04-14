@@ -11,9 +11,10 @@
 
 </head>
 <body>
-<div class="well">
+<div class="well-sm">
     <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="${contextPath}/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name} <a
+                href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container ">
@@ -60,24 +61,55 @@
                 <td>${appointment.treatmentDTO.name}</td>
                 <td>${appointment.dosage} ${appointment.treatmentDTO.dosageForm}</td>
                 <td>
-            <c:forEach items="${appointment.days}" var="day">
-                ${day}
-            </c:forEach>
+                    <c:forEach items="${appointment.days}" var="day">
+                        ${day}
+                    </c:forEach>
                 </td>
                 <td>
                     <c:forEach items="${appointment.time}" var="time">
                         ${time.toString()}
                     </c:forEach>
                 </td>
-                <td><a href="<c:url value="/patient/edit-appointment-${appointment.id}" />" class="btn btn-success custom-width">edit</a></td>
-                <td><a href="<c:url value="/patient/delete-appointment-${appointment.id}" />" class="btn btn-danger custom-width">delete</a></td>
+                <td><a href="<c:url value="/patient/edit-appointment-${appointment.id}" />"
+                       class="btn btn-success custom-width">edit</a></td>
+                <td>
+                    <form id="DeleteForm${appointment.id}" onclick="checkConfirmForm(${appointment.id},event)"
+                          action="${contextPath}/patient/delete-appointment-${appointment.id}">
+                    <a href="<c:url value="/patient/delete-appointment-${appointment.id}"/>" type="submit" class="btn btn-danger custom-width">delete</a>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
-
-
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function checkConfirmForm (id,e) {
+        e.preventDefault();
+        swal({
+            title: "Are you sure?",
+            text: "All Events will be deleted!",
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                swal({
+                    title: 'Deleted!',
+                    icon: 'success'
+                });
+                $('#DeleteForm'+id).submit();
+            } else {
+                swal("Cancelled", "", "error");
+            }
+        })
+    }
+</script>
 </body>
 </html>

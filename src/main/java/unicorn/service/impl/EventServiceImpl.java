@@ -16,9 +16,11 @@ import unicorn.dto.TreatmentDTO;
 import unicorn.entity.Appointment;
 import unicorn.entity.Event;
 import unicorn.entity.Patient;
+import unicorn.message.MessageSender;
 import unicorn.service.api.EventService;
 import unicorn.service.api.PatientService;
 
+import javax.jms.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,10 +42,14 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    private MessageSender messageSender;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(EventDTO eventDTO) {
         eventDAO.create(mapper.map(eventDTO, Event.class));
+        messageSender.send("Message is sent.");
         logger.info("Event is created.");
     }
 
@@ -55,7 +61,6 @@ public class EventServiceImpl implements EventService {
             eventDAO.update(mapper.map(eventDTO, Event.class));
             logger.info("Event is updated.");
         }
-
     }
 
     @Override

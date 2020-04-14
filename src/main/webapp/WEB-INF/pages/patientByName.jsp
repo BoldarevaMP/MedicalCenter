@@ -17,12 +17,16 @@
 </head>
 
 <body>
-<div class="well">
+<div class="well-sm">
     <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="${contextPath}/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container">
+    <div class="well">
+        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Patients</a></button>
+    </div>
+
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="lead">List of Patients </span></div>
     <div class="well">

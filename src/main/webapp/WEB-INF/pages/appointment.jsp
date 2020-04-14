@@ -13,12 +13,12 @@
 <body>
 <div class="well">
     <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="${contextPath}/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container ">
     <div class="well lead">Appointment Form</div>
-    <form:form method="POST" modelAttribute="appointment" class="form--horizontal ">
+    <form:form method="POST" modelAttribute="appointment" class="form--horizontal" id="UpdateForm">
         <div class="row">
             <div class="form-group col-md-12">
 
@@ -41,7 +41,7 @@
             <div class="form-group col-md-12">
                 <div class="col-md-6">
                     <span>Treatment Name</span>
-                    <form:input  type="text" id="treatmentDTO.name" path="treatmentDTO.name" class="AutoName form-control"/>
+                    <form:input  type="text" id="treatmentDTO.name" path="treatmentDTO.name" class="TreatmentName form-control"/>
                     <div class="has-error">
                         <form:errors path="treatmentDTO.name" class="help-inline"/>
                     </div>
@@ -154,7 +154,7 @@
             <div class="form-actions floatLeft">
                 <c:choose>
                     <c:when test="${edit}">
-                        <button id="button" class="btn btn-success" type="submit">Update Appointment</button>
+                        <button id="button" class="btn btn-success" type="submit" onclick="checkConfirmForm(event)">Update Appointment</button>
                     </c:when>
                     <c:otherwise>
                         <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
@@ -170,14 +170,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="${contextPath}/resources/js/sweetalert.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.AutoName').autocomplete({
+        $('.TreatmentName').autocomplete({
             source: function (req, resp) {
                 $.getJSON({
-                    url: "/getTreatmentByName",
-                    data: {name: $('.AutoName').val()},
+                    url: "/unicorn/getTreatmentByName",
+                    data: {name: $('.TreatmentName').val()},
                     success: function (data) {
                         resp($.map(data, function(v,i){
                             return v.name;
@@ -187,6 +188,27 @@
             }
         })
     })
+</script>
+<script type="text/javascript">
+    function checkConfirmForm (e) {
+        e.preventDefault();
+        swal({
+            title: "Are you sure?",
+            text: "All Previous Events will be deleted!",
+            icon: "warning",
+            buttons: [
+                'No, cancel it!',
+                'Yes, I am sure!'
+            ],
+            dangerMode: true,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                $('#UpdateForm').submit();
+            } else {
+                swal("Cancelled", "", "error");
+            }
+        })
+    }
 </script>
 </body>
 </html>

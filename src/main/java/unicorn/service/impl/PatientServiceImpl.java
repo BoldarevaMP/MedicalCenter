@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import unicorn.converter.AppointmentCorverter;
+import unicorn.converter.AppointmentConverter;
 import unicorn.converter.PatientConverter;
 import unicorn.dao.api.AppointmentDAO;
 import unicorn.dao.api.EventDAO;
@@ -21,6 +21,7 @@ import unicorn.entity.Event;
 import unicorn.entity.Patient;
 import unicorn.entity.User;
 import unicorn.entity.enums.PatientStatus;
+import unicorn.message.MessageSender;
 import unicorn.service.api.PatientService;
 import unicorn.service.api.UserService;
 
@@ -49,9 +50,11 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private ModelMapper mapper;
 
+
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void create(PatientDTO patientDTO) {
+    public PatientDTO create(PatientDTO patientDTO) {
         UserDTO userDTO = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         Patient patient = new Patient();
         patientDTO.setStartDate(LocalDate.now());
@@ -59,7 +62,9 @@ public class PatientServiceImpl implements PatientService {
         PatientConverter.convertPatientDtoToPatient(patientDTO, patient);
         patient.setDoctor(mapper.map(userDTO, User.class));
         patientDAO.create(patient);
+        patientDTO.setId(patient.getId());
         logger.info("Patient is created.");
+        return patientDTO;
     }
 
     @Override
@@ -98,7 +103,7 @@ public class PatientServiceImpl implements PatientService {
         List<AppointmentDTO> appointmentDtoList = new ArrayList<>();
         for (int i = 0; i < appointmentList.size(); i++) {
             AppointmentDTO appointmentDTO = new AppointmentDTO();
-            AppointmentCorverter.converterAppointmentToAppointmentDTO(appointmentList.get(i), appointmentDTO);
+            AppointmentConverter.converterAppointmentToAppointmentDTO(appointmentList.get(i), appointmentDTO);
             appointmentDTO.setPatientDTO(mapper.map(appointmentList.get(i).getPatient(), PatientDTO.class));
             appointmentDTO.setTreatmentDTO(mapper.map(appointmentList.get(i).getTreatment(), TreatmentDTO.class));
             appointmentDtoList.add(appointmentDTO);

@@ -9,7 +9,7 @@
     <packaging>war</packaging>
 
     <properties>
-    <failOnMissingWebXml>false</failOnMissingWebXml>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
     <dependencies>
@@ -155,9 +155,29 @@
             <artifactId>java-time-jsptags</artifactId>
             <version>1.1.4</version>
         </dependency>
+
+        <!-- MQ -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>5.0.7.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>javax.jms-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-jms-client-bom</artifactId>
+            <version>14.0.0.Beta2</version>
+            <type>pom</type>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <finalName>unicorn</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

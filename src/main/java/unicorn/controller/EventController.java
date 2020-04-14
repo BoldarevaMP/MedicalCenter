@@ -12,8 +12,11 @@ import unicorn.dto.PatientDTO;
 import unicorn.service.api.EventService;
 import unicorn.validator.EventValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+
+import static unicorn.converter.PageableConverter.convertToPageable;
 
 @Controller
 @RequestMapping(value = "/event")
@@ -26,23 +29,23 @@ public class EventController {
     private EventValidator eventValidator;
 
     @RequestMapping(value = {"/list/all"}, method = RequestMethod.GET)
-    public String listEvents(ModelMap model) {
+    public String listEvents(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getAll();
-        model.addAttribute("events", events);
+        model.addAttribute("events", convertToPageable(request, events));
         return "eventList";
     }
 
     @RequestMapping(value = {"/list/today"}, method = RequestMethod.GET)
-    public String listEventsToday(ModelMap model) {
+    public String listEventsToday(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getEventsByDateToday();
-        model.addAttribute("events", events);
+        model.addAttribute("events", convertToPageable(request, events));
         return "eventListToday";
     }
 
     @RequestMapping(value = {"/list/thishour"}, method = RequestMethod.GET)
-    public String listEventsThisHour(ModelMap model) {
+    public String listEventsThisHour(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getEventsByDateHour();
-        model.addAttribute("events", events);
+        model.addAttribute("events", convertToPageable(request, events));
         return "eventListThisHour";
     }
 
@@ -67,24 +70,6 @@ public class EventController {
 
     }
 
-    @RequestMapping(value = {"/addEvent"}, method = RequestMethod.GET)
-    public String createEvent(ModelMap model) {
-        EventDTO eventDTO = new EventDTO();
-        model.addAttribute("event", eventDTO);
-        model.addAttribute("edit", false);
-        return "event";
-    }
-
-    @RequestMapping(value = {"/addEvent"}, method = RequestMethod.POST)
-    public String createEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult result, ModelMap model) {
-        if (result.hasErrors()) {
-            return "event";
-        }
-        eventService.create(eventDTO);
-        model.addAttribute("success", "Event is saved successfully");
-        return "eventAdded";
-    }
-
     @RequestMapping(value = {"/edit-event-{id}"}, method = RequestMethod.GET)
     public String editEvent(@PathVariable Integer id, ModelMap model) {
         if (!model.containsAttribute("event")) {
@@ -96,8 +81,8 @@ public class EventController {
     }
 
     @RequestMapping(value = {"/edit-event-{id}"}, method = RequestMethod.POST)
-    public String updateEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult result,
-                              ModelMap model, RedirectAttributes redirectAttributes) {
+    public String updateEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult result, ModelMap model,
+                              RedirectAttributes redirectAttributes) {
         eventValidator.validate(eventDTO, result);
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", result);
@@ -105,10 +90,8 @@ public class EventController {
             redirectAttributes.addAttribute("id", eventDTO.getId());
             return "redirect:/event/edit-event-{id}";
         }
-
         eventService.updateStatusAndComment(eventDTO);
-        model.addAttribute("success", "Event was updated successfully");
-        return "eventAdded";
+        return "redirect:/event/list/all";
     }
 }
 

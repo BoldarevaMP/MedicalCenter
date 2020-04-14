@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import unicorn.converter.AppointmentCorverter;
+import unicorn.converter.AppointmentConverter;
 import unicorn.dao.api.AppointmentDAO;
 import unicorn.dao.api.EventDAO;
 import unicorn.dao.api.PatientDAO;
@@ -65,7 +65,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = new Appointment();
         appointmentDTO.setStatus(AppointmentStatus.ACTIVE);
-        AppointmentCorverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
+        AppointmentConverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
         appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
         appointment.setPatient(mapper.map(appointmentDTO.getPatientDTO(), Patient.class));
         appointmentDAO.create(appointment);
@@ -86,7 +86,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentDTO.getDays());
         List<LocalDateTime> datesWithTime = setTimeToDates(dates, appointmentDTO.getTime());
         Appointment appointment = appointmentDAO.getById(appointmentDTO.getId());
-        AppointmentCorverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
+        AppointmentConverter.converterAppointmentDtoToAppointment(appointmentDTO, appointment);
         appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
         appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
@@ -111,7 +111,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentDTO getById(Integer id) {
         Appointment appointment = appointmentDAO.getById(id);
         AppointmentDTO appointmentDTO = new AppointmentDTO();
-        AppointmentCorverter.converterAppointmentToAppointmentDTO(appointment, appointmentDTO);
+        AppointmentConverter.converterAppointmentToAppointmentDTO(appointment, appointmentDTO);
         appointmentDTO.setPatientDTO(mapper.map(appointment.getPatient(), PatientDTO.class));
         appointmentDTO.setTreatmentDTO(mapper.map(appointment.getTreatment(), TreatmentDTO.class));
         return appointmentDTO;
@@ -132,6 +132,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<LocalDate> daysInRange = new ArrayList<LocalDate>();
 
         DayOfWeek dowOfStart = startDate.getDayOfWeek();
+
         for (DaysOfWeek day : days) {
             int difference = getDayOfWeek(day).getValue() - dowOfStart.getValue();
             if (difference < 0) {

@@ -49,11 +49,9 @@ public class UserController {
         if (error != null) {
             model.addAttribute("error", "Email or password is incorrect.");
         }
-
         if (logout != null) {
             model.addAttribute("message", "Logged out successfully.");
         }
-
         return "login";
     }
 

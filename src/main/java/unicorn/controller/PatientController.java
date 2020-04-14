@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import unicorn.dto.AppointmentDTO;
 import unicorn.dto.PatientDTO;
 import unicorn.service.api.PatientService;
 import unicorn.validator.PatientValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+
+import static unicorn.converter.PageableConverter.convertToPageable;
 
 @Controller
 @RequestMapping(value = "/patient")
@@ -29,30 +33,29 @@ public class PatientController {
 
 
     @RequestMapping(value = {"/list"}, method = RequestMethod.GET)
-    public String listEvents(ModelMap model) {
+    public String listEvents(HttpServletRequest request, ModelMap model) {
         List<PatientDTO> patients = patientService.getAll();
-        model.addAttribute("patients", patients);
+        model.addAttribute("patients", convertToPageable(request, patients));
         return "patientList";
     }
 
 
     @RequestMapping(value = {"/addPatient"}, method = RequestMethod.GET)
     public String newPatient(ModelMap model) {
-        PatientDTO patientDTO = new PatientDTO();
-        model.addAttribute("patient", patientDTO);
+        model.addAttribute("patient", new PatientDTO());
         model.addAttribute("edit", false);
         return "patient";
     }
 
     @RequestMapping(value = {"/addPatient"}, method = RequestMethod.POST)
-    public String savePatient(@Valid @ModelAttribute("patient") PatientDTO patientDTO, BindingResult result, ModelMap model) {
+    public String savePatient(@Valid @ModelAttribute("patient") PatientDTO patientDTO, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
         patientValidator.validate(patientDTO, result);
         if (result.hasErrors()) {
             return "patient";
         }
-        patientService.create(patientDTO);
-        model.addAttribute("success", "Patient was saved successfully.");
-        return "patientAdded";
+        PatientDTO patient = patientService.create(patientDTO);
+        redirectAttributes.addAttribute("id", patient.getId());
+        return "redirect:/patient/edit-patient-{id}";
     }
 
     @RequestMapping(value = {"/edit-patient-{id}"}, method = RequestMethod.GET)
@@ -64,16 +67,5 @@ public class PatientController {
         model.addAttribute("appointments", appointmentDTOList);
         session.setAttribute("patient", patientDTO);
         return "patientEdit";
-    }
-
-    @RequestMapping(value = {"/edit-patient-{id}"}, method = RequestMethod.POST)
-    public String updatePatient(@Valid @ModelAttribute("patient") PatientDTO patientDTO, BindingResult result,
-                                ModelMap model) {
-        if (result.hasErrors()) {
-            return "patientEdit";
-        }
-        patientService.update(patientDTO);
-        model.addAttribute("success", "Patient was updated successfully.");
-        return "patientAdded";
     }
 }

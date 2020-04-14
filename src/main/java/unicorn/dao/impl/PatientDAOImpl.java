@@ -15,9 +15,8 @@ public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDA
 
     @Override
     public List<Patient> getAllSorted() {
-        List<Patient> list = entityManager.createNativeQuery("SELECT * FROM patients ORDER BY startDate DESC",
+        return (List<Patient>) entityManager.createNativeQuery("SELECT * FROM patients ORDER BY startDate DESC",
                 Patient.class).getResultList();
-        return list;
     }
 
     @Override

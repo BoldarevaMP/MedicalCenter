@@ -9,7 +9,7 @@ import java.util.List;
 public interface PatientService {
     List<PatientDTO> getAll();
 
-    void create(PatientDTO patientDTO);
+    PatientDTO create(PatientDTO patientDTO);
 
     void update(PatientDTO patientDTO);
 
@@ -18,5 +18,4 @@ public interface PatientService {
     void changePatientStatusToDischarge(Patient patient);
 
     List<AppointmentDTO> getAppointmentsByPatientId(Integer id);
-
 }

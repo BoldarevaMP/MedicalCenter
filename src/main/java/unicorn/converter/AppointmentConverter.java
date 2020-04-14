@@ -3,7 +3,7 @@ package unicorn.converter;
 import unicorn.dto.AppointmentDTO;
 import unicorn.entity.Appointment;
 
-public class AppointmentCorverter {
+public class AppointmentConverter {
     public static void converterAppointmentDtoToAppointment(AppointmentDTO appointmentDTO, Appointment appointment) {
         appointment.setId(appointmentDTO.getId());
         appointment.setStartDate(appointmentDTO.getStartDate());

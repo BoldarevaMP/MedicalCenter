@@ -13,10 +13,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ModelAndView handleRuntimeException(Exception ex) {
-        logger.error("Exception!" + ex.getMessage());
+        logger.error("Exception!");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error/exceptionPage");
-        modelAndView.addObject("ex", ex);
+        modelAndView.addObject("ex", ex != null ? ex: "");
         return modelAndView;
     }
 }

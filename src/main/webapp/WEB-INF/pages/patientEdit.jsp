@@ -91,7 +91,7 @@
         e.preventDefault();
         swal({
             title: "Are you sure?",
-            text: "All Events will be deleted!",
+            text: "All Events will be cancelled!",
             icon: "warning",
             buttons: [
                 'No, cancel it!',

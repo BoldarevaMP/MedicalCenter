@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import unicorn.converter.EventConverter;
 import unicorn.dao.api.EventDAO;
 import unicorn.dao.api.PatientDAO;
-import unicorn.dto.AppointmentDTO;
-import unicorn.dto.EventDTO;
-import unicorn.dto.PatientDTO;
-import unicorn.dto.TreatmentDTO;
+import unicorn.dto.*;
 import unicorn.entity.Appointment;
 import unicorn.entity.Event;
 import unicorn.entity.Patient;
@@ -119,6 +116,19 @@ public class EventServiceImpl implements EventService {
     public List<EventDTO> getEventsByDateToday() {
         List<Event> eventList = eventDAO.getEventsByDateToday();
         return createEventDtoListBasedOnEventList(eventList);
+    }
+
+    @Override
+    @Transactional
+    public List<EventRestDTO> createEventRestDtoListBasedOnEventDtoList(List<EventDTO> eventDTOList) {
+        List<EventRestDTO> eventRestDTOList = new ArrayList<>();
+        for (int i =0; i<eventDTOList.size(); i++){
+            EventRestDTO eventRestDTO = new EventRestDTO();
+            EventConverter.convertEventDtoToEventDtoRest(eventDTOList.get(i), eventRestDTO);
+            eventRestDTOList.add(eventRestDTO);
+        }
+
+        return eventRestDTOList;
     }
 
     @Override

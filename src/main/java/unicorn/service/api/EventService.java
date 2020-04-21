@@ -2,6 +2,7 @@ package unicorn.service.api;
 
 
 import unicorn.dto.EventDTO;
+import unicorn.dto.EventRestDTO;
 import unicorn.dto.PatientDTO;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface EventService {
     List<EventDTO> getEventsByDateHour();
 
     List<EventDTO> getEventsByDateToday();
+
+    List<EventRestDTO> createEventRestDtoListBasedOnEventDtoList(List<EventDTO> eventDTOList);
 
     List<EventDTO> getEventsByPatientId(Integer id);
 

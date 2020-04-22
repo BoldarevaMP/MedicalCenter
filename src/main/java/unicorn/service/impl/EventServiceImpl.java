@@ -122,7 +122,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public List<EventRestDTO> createEventRestDtoListBasedOnEventDtoList(List<EventDTO> eventDTOList) {
         List<EventRestDTO> eventRestDTOList = new ArrayList<>();
-        for (int i =0; i<eventDTOList.size(); i++){
+        for (int i = 0; i < eventDTOList.size(); i++) {
             EventRestDTO eventRestDTO = new EventRestDTO();
             EventConverter.convertEventDtoToEventDtoRest(eventDTOList.get(i), eventRestDTO);
             eventRestDTOList.add(eventRestDTO);

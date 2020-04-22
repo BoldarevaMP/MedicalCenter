@@ -22,7 +22,7 @@ public class EventRestDTO implements Serializable {
 
     private String dosageForm;
 
-    private LocalDateTime date;
+    private String date;
 
     private String status;
 

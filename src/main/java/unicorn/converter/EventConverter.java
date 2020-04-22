@@ -20,7 +20,7 @@ public class EventConverter {
         eventRestDTO.setName(eventDTO.getPatientDtoLastName() + " " + eventDTO.getPatientDtoFirstName());
         eventRestDTO.setTreatmentName(eventDTO.getTreatmentDtoName());
         eventRestDTO.setDosage(eventDTO.getAppointmentDtoDosage());
-        eventRestDTO.setDate(eventDTO.getDate());
+        eventRestDTO.setDate(eventDTO.getDate().getHour() + ":00");
         eventRestDTO.setDosageForm(eventDTO.getTreatmentDtoDosageForm()!=null?
                 eventDTO.getTreatmentDtoDosageForm().toString() : "");
         eventRestDTO.setStatus(eventDTO.getStatus().toString());

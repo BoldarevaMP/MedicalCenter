@@ -15,7 +15,7 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     @Override
     public List<Event> getEventsByDateToday() {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE DATE(date) = " +
-                "CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day'", Event.class).getResultList();
+                "CURRENT_DATE AND DATE(date) < CURRENT_DATE + INTERVAL '1 day' ORDER BY date", Event.class).getResultList();
         return list.isEmpty() ? new ArrayList<>() : list;
     }
 

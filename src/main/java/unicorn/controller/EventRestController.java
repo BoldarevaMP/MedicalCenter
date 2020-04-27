@@ -22,6 +22,7 @@ public class EventRestController {
     @GetMapping(value = "/events-today")
     public List<EventRestDTO> getEventsRestToday(){
         logger.info("Event list is sent");
-        return eventService.createEventRestDtoListBasedOnEventDtoList(eventService.getEventsByDateToday());
+        return eventService.getEventsByDateTodayAfterNow();
+
     }
 }

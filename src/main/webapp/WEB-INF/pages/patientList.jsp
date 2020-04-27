@@ -26,7 +26,7 @@
 </div>
 <div class="generic-container">
     <div class="well">
-        <button class="btn"><a href="<c:url value="/patient/addPatient"/>">Add New Patient</a></button>
+        <button class="btn"><a href="<c:url value="/patient/add-patient"/>">Add New Patient</a></button>
     </div>
     <div class="panel panel-default">
 

@@ -40,14 +40,14 @@ public class PatientController {
     }
 
 
-    @RequestMapping(value = {"/addPatient"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/add-patient"}, method = RequestMethod.GET)
     public String newPatient(ModelMap model) {
         model.addAttribute("patient", new PatientDTO());
         model.addAttribute("edit", false);
         return "patient";
     }
 
-    @RequestMapping(value = {"/addPatient"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/add-patient"}, method = RequestMethod.POST)
     public String savePatient(@Valid @ModelAttribute("patient") PatientDTO patientDTO, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
         patientValidator.validate(patientDTO, result);
         if (result.hasErrors()) {

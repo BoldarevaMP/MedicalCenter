@@ -50,9 +50,9 @@ public class MessageConfig {
             QueueSession session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
             queue = session.createQueue("DLQ");
         } catch (JMSException e) {
-            e.printStackTrace();
+            logger.error("Exception: Can't connect to queue");
         }
-        logger.info("Queue is created");
+        logger.info("Connection to queue is established");
         return queue;
     }
 

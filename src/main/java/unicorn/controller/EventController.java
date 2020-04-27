@@ -42,14 +42,14 @@ public class EventController {
         return "eventListToday";
     }
 
-    @RequestMapping(value = {"/list/thishour"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/list/hour"}, method = RequestMethod.GET)
     public String listEventsThisHour(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getEventsByDateHour();
         model.addAttribute("events", convertToPageable(request, events));
         return "eventListThisHour";
     }
 
-    @RequestMapping(value = {"/patientName"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/patient-name"}, method = RequestMethod.GET)
     public String listPatientByLastName(ModelMap model, @RequestParam String lastName) {
         model.addAttribute("patients", eventService.getPatientsByLastName(lastName));
         return "patientByName";

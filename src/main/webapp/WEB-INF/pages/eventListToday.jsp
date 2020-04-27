@@ -24,12 +24,12 @@
 </div>
 <div class="generic-container">
     <div class="well">
-        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Events</a>></button>
+        <button class="btn"><a href="<c:url value="/event/list/all"/>">All Events</a></button>
         <button class="btn"><a href="<c:url value="/event/list/today"/>">Today Events</a></button>
-        <button class="btn"><a href="<c:url value="/event/list/thishour"/>">This Hour Events</a></button>
+        <button class="btn"><a href="<c:url value="/event/list/hour"/>">This Hour Events</a></button>
     </div>
     <div class="panel panel-default">
-            <form method="GET" action="${contextPath}/event/patientName" class="form--horizontal ">
+            <form method="GET" action="${contextPath}/event/patient-name" class="form--horizontal ">
                 <div class="well">
                     <table>
                         <tr>

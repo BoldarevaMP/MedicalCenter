@@ -27,7 +27,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentValidator appointmentValidator;
 
-    @RequestMapping(value = {"/patient/addAppointment"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/patient/add-appointment"}, method = RequestMethod.GET)
     public String addAppointment(ModelMap model, HttpSession session) {
         if (!model.containsAttribute("appointment")) {
             AppointmentDTO appointment = new AppointmentDTO();
@@ -37,13 +37,13 @@ public class AppointmentController {
         return "appointment";
     }
 
-    @RequestMapping(value = "/patient/addAppointment", method = RequestMethod.POST)
+    @RequestMapping(value = "/patient/add-appointment", method = RequestMethod.POST)
     public String addAppointment(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO, BindingResult bindingResult, HttpSession session, RedirectAttributes redirectAttributes) {
         appointmentValidator.validate(appointmentDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.appointment", bindingResult);
             redirectAttributes.addFlashAttribute("appointment", appointmentDTO);
-            return "redirect:/patient/addAppointment";
+            return "redirect:/patient/add-appointment";
         }
         appointmentDTO.setPatientDTO((PatientDTO) session.getAttribute("patient"));
         appointmentService.create(appointmentDTO);

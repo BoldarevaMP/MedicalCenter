@@ -10,6 +10,8 @@ public interface EventDAO extends GenericDAO<Event> {
 
     List<Event> getEventsByDateToday();
 
+    List<Event> getEventsByDateTodayAfterNow();
+
     List<Event> getEventsByDateHour();
 
     List<Event> getEventsByPatientId(Integer id);

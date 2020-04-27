@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import unicorn.entity.enums.EventStatus;
+import unicorn.entity.enums.TreatmentDosageForm;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -42,4 +43,14 @@ public class Event {
     public Integer getPatientId() {
         return getAppointment().getPatient().getId();
     }
+
+    public String getPatientLastName() {return getAppointment().getPatient().getLastName();}
+
+    public String getPatientFirstName() {return getAppointment().getPatient().getFirstName();}
+
+    public String getTreatmentName() {return getAppointment().getTreatment().getName();}
+
+    public Integer getDosage() {return getAppointment().getDosage();}
+
+    public TreatmentDosageForm getDosageForm() {return getAppointment().getTreatment().getDosageForm();}
 }

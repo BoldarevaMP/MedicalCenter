@@ -118,13 +118,18 @@ public class EventServiceImpl implements EventService {
         return createEventDtoListBasedOnEventList(eventList);
     }
 
+    public List<EventRestDTO> getEventsByDateTodayAfterNow(){
+        List<Event> eventList = eventDAO.getEventsByDateTodayAfterNow();
+        return createEventRestDtoListBasedOnEventList(eventList);
+    }
+
     @Override
     @Transactional
-    public List<EventRestDTO> createEventRestDtoListBasedOnEventDtoList(List<EventDTO> eventDTOList) {
+    public List<EventRestDTO> createEventRestDtoListBasedOnEventList(List<Event> evenList) {
         List<EventRestDTO> eventRestDTOList = new ArrayList<>();
-        for (int i = 0; i < eventDTOList.size(); i++) {
+        for (int i = 0; i < evenList.size(); i++) {
             EventRestDTO eventRestDTO = new EventRestDTO();
-            EventConverter.convertEventDtoToEventDtoRest(eventDTOList.get(i), eventRestDTO);
+            EventConverter.convertEventToEventRestDto(evenList.get(i), eventRestDTO);
             eventRestDTOList.add(eventRestDTO);
         }
 

@@ -15,15 +15,14 @@ public class EventConverter {
         eventDTO.setComment(event.getComment());
     }
 
-    public static void convertEventDtoToEventDtoRest(EventDTO eventDTO, EventRestDTO eventRestDTO){
-        eventRestDTO.setId(eventDTO.getId());
-        eventRestDTO.setName(eventDTO.getPatientDtoLastName() + " " + eventDTO.getPatientDtoFirstName());
-        eventRestDTO.setTreatmentName(eventDTO.getTreatmentDtoName());
-        eventRestDTO.setDosage(eventDTO.getAppointmentDtoDosage());
-        eventRestDTO.setDate(eventDTO.getDate().getHour() + ":00");
-        eventRestDTO.setDosageForm(eventDTO.getTreatmentDtoDosageForm()!=null?
-                eventDTO.getTreatmentDtoDosageForm().toString() : "");
-        eventRestDTO.setStatus(eventDTO.getStatus().toString());
-        eventRestDTO.setComment(eventDTO.getComment());
+    public static void convertEventToEventRestDto (Event event, EventRestDTO eventRestDTO){
+        eventRestDTO.setId(event.getId());
+        eventRestDTO.setName(event.getPatientLastName() + " " + event.getPatientFirstName());
+        eventRestDTO.setTreatmentName(event.getTreatmentName());
+        eventRestDTO.setDosage(event.getDosage());
+        eventRestDTO.setDate(event.getDate().getHour() + ":00");
+        eventRestDTO.setDosageForm(event.getDosageForm()!=null?event.getDosageForm().toString():"");
+        eventRestDTO.setStatus(event.getStatus().toString());
+        eventRestDTO.setComment(event.getComment());
     }
 }

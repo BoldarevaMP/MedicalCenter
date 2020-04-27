@@ -20,29 +20,8 @@ public class EventDTO {
     private LocalDateTime date;
     private EventStatus status;
     private String comment;
-    @JsonIgnore
+
     private AppointmentDTO appointmentDTO;
 
-    public String getPatientDtoLastName() {
-        return getAppointmentDTO().getPatientDTO().getLastName();
     }
-
-    public String getPatientDtoFirstName() {
-        return getAppointmentDTO().getPatientDTO().getFirstName();
-    }
-
-    public String getTreatmentDtoName() {
-        return getAppointmentDTO().getTreatmentDtoName();
-    }
-
-    public Integer getAppointmentDtoDosage() {
-        return getAppointmentDTO().getDosage();
-    }
-
-    public TreatmentDosageForm getTreatmentDtoDosageForm(){
-        return getAppointmentDTO().getTreatmentDTO().getDosageForm();
-    }
-
-}
-
 

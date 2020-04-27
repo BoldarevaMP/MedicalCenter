@@ -37,7 +37,7 @@
     <!-- Default panel contents -->
     <div class="panel-heading"><span class="lead">List of Appointments </span></div>
     <div class="well">
-        <a href="<c:url value="/patient/addAppointment" />" class="btn btn-primary">Add New Appointment</a>
+        <a href="<c:url value="/patient/add-appointment" />" class="btn btn-primary">Add New Appointment</a>
     </div>
     <table class="table table-hover">
         <thead>

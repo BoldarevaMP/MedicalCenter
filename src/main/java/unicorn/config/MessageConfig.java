@@ -13,6 +13,8 @@ import java.util.Properties;
 @Configuration
 public class MessageConfig {
     private static final Logger logger = Logger.getLogger(MessageConfig.class);
+    private final String SEC_CRED_LOGIN = "root";
+    private final String SEC_CRED_PASS = "root";
 
     @Bean
     public Context context() throws NamingException {
@@ -20,8 +22,8 @@ public class MessageConfig {
         props.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
         props.put(Context.PROVIDER_URL, "http-remoting://127.0.0.1:8080");
         props.put("jboss.naming.client.ejb.context", true);
-        props.put(Context.SECURITY_PRINCIPAL, "root");
-        props.put(Context.SECURITY_CREDENTIALS, "root");
+        props.put(Context.SECURITY_PRINCIPAL, SEC_CRED_LOGIN);
+        props.put(Context.SECURITY_CREDENTIALS, SEC_CRED_PASS);
         return new InitialContext(props);
     }
 
@@ -31,8 +33,8 @@ public class MessageConfig {
     }
 
     @Bean
-    public JMSContext jmsContext(QueueConnectionFactory connectionFactory){
-        return connectionFactory.createContext("root","root");
+    public JMSContext jmsContext(QueueConnectionFactory connectionFactory) {
+        return connectionFactory.createContext(SEC_CRED_LOGIN, SEC_CRED_PASS);
     }
 
     @Bean
@@ -41,16 +43,13 @@ public class MessageConfig {
     }
 
     @Bean
-    public Queue queue() throws NamingException {
-        Queue queue = null;
-        try {
-            QueueConnectionFactory factory = (QueueConnectionFactory)context().lookup("jms/RemoteConnectionFactory");
-            QueueConnection queueConnection = factory.createQueueConnection("root","root");
+    public Queue queue() throws Exception {
+        Queue queue;
+        QueueConnectionFactory factory = (QueueConnectionFactory) context().lookup("jms/RemoteConnectionFactory");
+        try (QueueConnection queueConnection = factory.createQueueConnection(SEC_CRED_LOGIN, SEC_CRED_PASS);
+             QueueSession session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE)) {
             queueConnection.start();
-            QueueSession session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
             queue = session.createQueue("DLQ");
-        } catch (JMSException e) {
-            logger.error("Exception: Can't connect to queue");
         }
         logger.info("Connection to queue is established");
         return queue;

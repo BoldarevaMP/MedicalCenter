@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
         logger.error("Exception!");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error/exceptionPage");
-        modelAndView.addObject("ex", ex != null ? ex: "");
+        modelAndView.addObject("ex", ex != null ? ex : "");
         return modelAndView;
     }
 }

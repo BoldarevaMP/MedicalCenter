@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PageableConverter {
 
-    public static PagedListHolder convertToPageable(HttpServletRequest request, List list){
+    public static PagedListHolder convertToPageable(HttpServletRequest request, List list) {
         PagedListHolder pagedListHolder = new PagedListHolder(list);
         int page = ServletRequestUtils.getIntParameter(request, "p", 0);
         pagedListHolder.setPage(page);

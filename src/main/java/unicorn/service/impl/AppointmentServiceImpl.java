@@ -31,12 +31,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     private static final Logger logger = Logger.getLogger(AppointmentServiceImpl.class);
+    private final String UPDATE = "Update";
 
     @Autowired
     private ModelMapper mapper;
@@ -75,7 +77,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDAO.create(appointment);
         appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
-        messageSender.send("Update");
+        messageSender.send(UPDATE);
         logger.info("Appointment is created.");
     }
 
@@ -95,7 +97,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setTreatment(treatmentDAO.getByName(appointmentDTO.getTreatmentDtoName()));
         appointment.setEventList(createEventsOfAppointment(datesWithTime, appointment));
         appointmentDAO.update(appointment);
-        messageSender.send("Update");
+        messageSender.send(UPDATE);
         logger.info("Appointment is updated.");
     }
 
@@ -109,7 +111,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setStatus(AppointmentStatus.CANCELLED);
         appointmentDAO.update(appointment);
         patientService.changePatientStatusToDischarge(patient);
-        messageSender.send("Update");
+        messageSender.send(UPDATE);
         logger.info("Appointment is deleted.");
     }
 
@@ -141,7 +143,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         DayOfWeek dowOfStart = startDate.getDayOfWeek();
 
         for (DaysOfWeek day : days) {
-            int difference = getDayOfWeek(day).getValue() - dowOfStart.getValue();
+
+            int difference = Optional.ofNullable(getDayOfWeek(day)).orElse(dowOfStart).getValue() - dowOfStart.getValue();
             if (difference < 0) {
                 difference += daysInWeek;
             }
@@ -153,6 +156,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 currentDay = currentDay.plusDays(daysInWeek);
             }
         }
+
         return daysInRange;
     }
 
@@ -220,5 +224,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             eventDAO.update(event);
         }
         logger.info("Events are cancelled by doctor.");
+    }
+
+    public void setMapper(ModelMapper mapper) {
+        this.mapper = mapper;
     }
 }

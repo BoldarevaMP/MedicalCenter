@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface AppointmentService {
+
     void create(AppointmentDTO appointmentDTO);
 
     AppointmentDTO getById(Integer id);

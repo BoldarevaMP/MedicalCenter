@@ -11,8 +11,6 @@ public interface PatientService {
 
     PatientDTO create(PatientDTO patientDTO);
 
-    void update(PatientDTO patientDTO);
-
     PatientDTO getById(Integer id);
 
     void changePatientStatusToDischarge(Patient patient);

@@ -8,7 +8,7 @@ public interface PatientDAO extends GenericDAO<Patient> {
 
     List<Patient> getPatientByLastName(String name);
 
-    List<Patient> getByLikeName(String name);
+    List<Patient> getPatientsByLikeName(String name);
 
     List<Patient> getAllSorted();
 }

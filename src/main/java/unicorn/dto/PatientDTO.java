@@ -8,12 +8,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 import unicorn.entity.enums.PatientStatus;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientDTO {
+public class PatientDTO implements Serializable {
 
     private Integer id;
 

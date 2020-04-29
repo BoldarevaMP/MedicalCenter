@@ -2,7 +2,6 @@ package unicorn.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import unicorn.dao.api.PatientDAO;
-import unicorn.entity.Event;
 import unicorn.entity.Patient;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,7 +31,7 @@ public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDA
     }
 
     @Override
-    public List<Patient> getByLikeName(String name) {
+    public List<Patient> getPatientsByLikeName(String name) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Patient> criteriaQuery = criteriaBuilder.createQuery(Patient.class);
         Root<Patient> patientRoot = criteriaQuery.from(Patient.class);

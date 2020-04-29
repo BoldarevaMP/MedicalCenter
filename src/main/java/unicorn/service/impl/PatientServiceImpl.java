@@ -21,7 +21,6 @@ import unicorn.entity.Event;
 import unicorn.entity.Patient;
 import unicorn.entity.User;
 import unicorn.entity.enums.PatientStatus;
-import unicorn.message.MessageSender;
 import unicorn.service.api.PatientService;
 import unicorn.service.api.UserService;
 
@@ -50,8 +49,6 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private ModelMapper mapper;
 
-
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public PatientDTO create(PatientDTO patientDTO) {
@@ -65,13 +62,6 @@ public class PatientServiceImpl implements PatientService {
         patientDTO.setId(patient.getId());
         logger.info("Patient is created.");
         return patientDTO;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void update(PatientDTO patientDTO) {
-        patientDAO.update(mapper.map(patientDTO, Patient.class));
-        logger.info("Patient is updated.");
     }
 
     @Override
@@ -126,5 +116,9 @@ public class PatientServiceImpl implements PatientService {
             patientDAO.update(patient);
             logger.info("Patient is discharged.");
         }
+    }
+
+    public void setMapper(ModelMapper mapper) {
+        this.mapper = mapper;
     }
 }

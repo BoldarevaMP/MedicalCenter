@@ -39,14 +39,6 @@ public class UserServiceImpl implements UserService {
         logger.info("User is created.");
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void update(UserDTO userDTO) {
-        User user = userDAO.getById(userDTO.getId());
-        userDAO.update(mapper.map(userDTO, User.class));
-        logger.info("User is updated.");
-    }
-
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public UserDTO getUserByEmail(String email) {
@@ -57,5 +49,9 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    public void setMapper(ModelMapper mapper) {
+        this.mapper = mapper;
     }
 }

@@ -17,7 +17,6 @@ import unicorn.message.MessageSender;
 import unicorn.service.api.EventService;
 import unicorn.service.api.PatientService;
 
-import javax.jms.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
 
     private static final Logger logger = Logger.getLogger(EventServiceImpl.class);
+    private final String UPDATE = "Update";
 
     @Autowired
     private EventDAO eventDAO;
@@ -44,24 +44,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void create(EventDTO eventDTO) {
-        eventDAO.create(mapper.map(eventDTO, Event.class));
-        logger.info("Event is created.");
-    }
-
-    @Override
-    @Transactional
-    public void update(EventDTO eventDTO) {
-        Event event = eventDAO.getById(eventDTO.getId());
-        if (event != null) {
-            eventDAO.update(mapper.map(eventDTO, Event.class));
-            messageSender.send("Update");
-            logger.info("Event is updated.");
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public void updateStatusAndComment(EventDTO eventDTO) {
         Event event = eventDAO.getById(eventDTO.getId());
         Patient patient = patientDAO.getById(event.getPatientId());
@@ -69,15 +51,8 @@ public class EventServiceImpl implements EventService {
         event.setComment(eventDTO.getComment());
         eventDAO.update(event);
         patientService.changePatientStatusToDischarge(patient);
-        messageSender.send("Update");
+        messageSender.send(UPDATE);
         logger.info("Event is updated by nurse.");
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<EventDTO> getAllPlanned() {
-        List<Event> eventList = eventDAO.getAllPlanned();
-        return createEventDtoListBasedOnEventList(eventList);
     }
 
     @Override
@@ -118,22 +93,9 @@ public class EventServiceImpl implements EventService {
         return createEventDtoListBasedOnEventList(eventList);
     }
 
-    public List<EventRestDTO> getEventsByDateTodayAfterNow(){
+    public List<EventRestDTO> getEventsByDateTodayAfterNow() {
         List<Event> eventList = eventDAO.getEventsByDateTodayAfterNow();
         return createEventRestDtoListBasedOnEventList(eventList);
-    }
-
-    @Override
-    @Transactional
-    public List<EventRestDTO> createEventRestDtoListBasedOnEventList(List<Event> evenList) {
-        List<EventRestDTO> eventRestDTOList = new ArrayList<>();
-        for (int i = 0; i < evenList.size(); i++) {
-            EventRestDTO eventRestDTO = new EventRestDTO();
-            EventConverter.convertEventToEventRestDto(evenList.get(i), eventRestDTO);
-            eventRestDTOList.add(eventRestDTO);
-        }
-
-        return eventRestDTOList;
     }
 
     @Override
@@ -155,11 +117,14 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<PatientDTO> getPatientsByLikeName(String name) {
-        List<Patient> list = patientDAO.getByLikeName(name);
+        List<Patient> list = patientDAO.getPatientsByLikeName(name);
         return list.stream().map(patient -> mapper.map(patient, PatientDTO.class))
                 .collect(Collectors.toList());
     }
 
+    public void setMapper(ModelMapper mapper) {
+        this.mapper = mapper;
+    }
 
     private List<EventDTO> createEventDtoListBasedOnEventList(List<Event> eventList) {
         List<EventDTO> eventDTOList = new ArrayList<>();
@@ -176,5 +141,16 @@ public class EventServiceImpl implements EventService {
             eventDTOList.add(eventDTO);
         }
         return eventDTOList;
+    }
+
+    private List<EventRestDTO> createEventRestDtoListBasedOnEventList(List<Event> evenList) {
+        List<EventRestDTO> eventRestDTOList = new ArrayList<>();
+        for (int i = 0; i < evenList.size(); i++) {
+            EventRestDTO eventRestDTO = new EventRestDTO();
+            EventConverter.convertEventToEventRestDto(evenList.get(i), eventRestDTO);
+            eventRestDTOList.add(eventRestDTO);
+        }
+
+        return eventRestDTOList;
     }
 }

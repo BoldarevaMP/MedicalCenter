@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import unicorn.dao.api.EventDAO;
 import unicorn.entity.Event;
 
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByDateTodayAfterNow(){
+    public List<Event> getEventsByDateTodayAfterNow() {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW()" +
                 "AND date < (CURRENT_DATE + INTERVAL '1 day') ORDER BY date", Event.class).getResultList();
         return list.isEmpty() ? new ArrayList<>() : list;
@@ -30,13 +29,6 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     public List<Event> getEventsByDateHour() {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE date >= NOW() " +
                 "AND date < (NOW() + INTERVAL '1 hour')", Event.class).getResultList();
-        return list.isEmpty() ? new ArrayList<>() : list;
-    }
-
-    @Override
-    public List<Event> getAllPlanned() {
-        TypedQuery<Event> query = entityManager.createQuery("FROM Event WHERE status LIKE 'PLANNED'", Event.class);
-        List<Event> list = query.getResultList();
         return list.isEmpty() ? new ArrayList<>() : list;
     }
 

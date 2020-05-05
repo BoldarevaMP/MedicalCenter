@@ -12,26 +12,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>403</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet"/>
 <body>
 
-<section id="container" >
+<section id="container">
     <div class="row margin-top-10">
         <div class="col-lg-6 col-lg-offset-3">
             <div class="lock-screen">
-                <h1><span class="color">Access denied</span><br><span class="color">Sorry, but you don't have enough rights :(</span><br/></h1>
-                    <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                        <h3><a href="<c:url value="/patient/list"/>">Back to ----> the list of patients</a></h3>
-                    </sec:authorize>
-                    <sec:authorize access="hasRole('ROLE_NURSE')">
-                        <h3><a href="<c:url value="/event/list/all"/>">Back to ----> the list of events</a></h3>
-                    </sec:authorize>
+                <h1><span class="color">Access denied</span><br><span class="color">You don't have enough rights </span><br/>
+                </h1>
+                <sec:authorize access="hasRole('ROLE_DOCTOR')">
+                    <h3><a href="<c:url value="/patient/list"/>">Back to ----> the list of patients</a></h3>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_NURSE')">
+                    <h3><a href="<c:url value="/event/list/all"/>">Back to ----> the list of events</a></h3>
+                </sec:authorize>
             </div>
         </div>
     </div>
 </section>
 
-<script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script  src="${contextPath}/resources/js/bootstrap.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap.js"></script>
 </body>
 </html>

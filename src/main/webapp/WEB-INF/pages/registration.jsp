@@ -18,6 +18,12 @@
 
     <title>Create an account</title>
 
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
+
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
@@ -54,7 +60,8 @@
 
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" id="Password" path="password" class="form-control" placeholder="Password"></form:input>
+                <form:input type="password" id="Password" path="password" class="form-control"
+                            placeholder="Password"></form:input>
                 <form:errors path="password"></form:errors>
             </div>
         </spring:bind>
@@ -74,8 +81,8 @@
                 <form:errors path="identKey"></form:errors>
             </div>
         </spring:bind>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-        <h4 class="text-center"><a href="${contextPath}/login">Sign In</a></h4>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+        <h3 class="text-center"><a href="${contextPath}/login">Sign In</a></h3>
     </form:form>
 </div>
 <!-- /container -->

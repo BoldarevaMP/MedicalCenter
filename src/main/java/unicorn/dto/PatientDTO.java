@@ -11,6 +11,10 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Patient DTO class
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

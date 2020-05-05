@@ -39,8 +39,8 @@ public class PatientDAOImpl extends GenericDAOImpl<Patient> implements PatientDA
         if (name != null) {
             criteriaQuery.where(entityManager.getCriteriaBuilder().like(patientRoot.get("lastName"), "%" + name + "%"));
         }
-        List<Patient> list = entityManager.createQuery(criteriaQuery).getResultList();
-        return list;
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
 

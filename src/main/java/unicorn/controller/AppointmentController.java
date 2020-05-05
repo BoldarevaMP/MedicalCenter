@@ -17,6 +17,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Process requests related with appointments
+ */
 
 @Controller
 public class AppointmentController {
@@ -27,7 +30,15 @@ public class AppointmentController {
     @Autowired
     private AppointmentValidator appointmentValidator;
 
-    @RequestMapping(value = {"/patient/add-appointment"}, method = RequestMethod.GET)
+    /**
+     * Shows form for add appointment
+     *
+     * @param model   - model for view
+     * @param session - object for keeping and using session attributes
+     * @return page for adding appointment
+     */
+
+    @GetMapping(value = {"/patient/add-appointment"})
     public String addAppointment(ModelMap model, HttpSession session) {
         if (!model.containsAttribute("appointment")) {
             AppointmentDTO appointment = new AppointmentDTO();
@@ -37,8 +48,19 @@ public class AppointmentController {
         return "appointment";
     }
 
-    @RequestMapping(value = "/patient/add-appointment", method = RequestMethod.POST)
-    public String addAppointment(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO, BindingResult bindingResult, HttpSession session, RedirectAttributes redirectAttributes) {
+    /**
+     * Saves patient data
+     *
+     * @param appointmentDTO     - data for saving
+     * @param bindingResult      - object for keeping errors
+     * @param session            - object for keeping and using session attributes
+     * @param redirectAttributes - attribute for redirect to concrete page
+     * @return url for redirecting to concrete patient page
+     */
+
+    @PostMapping(value = "/patient/add-appointment")
+    public String addAppointment(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO,
+                                 BindingResult bindingResult, HttpSession session, RedirectAttributes redirectAttributes) {
         appointmentValidator.validate(appointmentDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.appointment", bindingResult);
@@ -51,7 +73,15 @@ public class AppointmentController {
         return "redirect:/patient/edit-patient-{id}";
     }
 
-    @RequestMapping(value = {"/patient/delete-appointment-{id}"}, method = RequestMethod.GET)
+    /**
+     * Changes appointment status from active to cancelled
+     *
+     * @param id                 - id of editing appointment
+     * @param redirectAttributes - attribute for redirect to concrete page
+     * @return url for redirecting to concrete patient page
+     */
+
+    @GetMapping(value = {"/patient/delete-appointment-{id}"})
     public String deleteAppointment(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         AppointmentDTO appointmentDTO = appointmentService.getById(id);
         appointmentService.changeStatusToCancelledById(id);
@@ -59,7 +89,15 @@ public class AppointmentController {
         return "redirect:/patient/edit-patient-{id}";
     }
 
-    @RequestMapping(value = {"/patient/edit-appointment-{id}"}, method = RequestMethod.GET)
+    /**
+     * Gets appointment data from DB and displays form for editing
+     *
+     * @param id    - id of editing appointment
+     * @param model - model for view
+     * @return page for appointment editing
+     */
+
+    @GetMapping(value = {"/patient/edit-appointment-{id}"})
     public String editAppointment(@PathVariable Integer id, Model model) {
         if (!model.containsAttribute("appointment")) {
             AppointmentDTO appointmentDTO = appointmentService.getById(id);
@@ -69,11 +107,21 @@ public class AppointmentController {
         return "appointment";
     }
 
-    @RequestMapping(value = {"/patient/edit-appointment-{id}"}, method = RequestMethod.POST)
-    public String updateAppointment(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-        appointmentValidator.validate(appointmentDTO, result);
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.appointment", result);
+    /**
+     * Updates appointment data
+     *
+     * @param appointmentDTO     - data for updating
+     * @param bindingResult      - object for keeping errors
+     * @param redirectAttributes - attribute for redirect to concrete page
+     * @return url for redirect to concrete patient page
+     */
+
+    @PostMapping(value = {"/patient/edit-appointment-{id}"})
+    public String updateAppointment(@Valid @ModelAttribute("appointment") AppointmentDTO appointmentDTO,
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        appointmentValidator.validate(appointmentDTO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.appointment", bindingResult);
             redirectAttributes.addFlashAttribute("appointment", appointmentDTO);
             redirectAttributes.addAttribute("id", appointmentDTO.getId());
             return "redirect:/patient/edit-appointment-{id}";
@@ -83,7 +131,14 @@ public class AppointmentController {
         return "redirect:/patient/edit-patient-{id}";
     }
 
-    @RequestMapping(value = {"/getTreatmentByName"}, method = RequestMethod.GET)
+    /**
+     * Provides list of treatments
+     *
+     * @param name - treatment name
+     * @return list of treatments
+     */
+
+    @GetMapping(value = {"/getTreatmentByName"})
     public @ResponseBody
     List<TreatmentDTO> getTreatments(@RequestParam String name) {
         return appointmentService.getTreatmentByLikeNames(name);

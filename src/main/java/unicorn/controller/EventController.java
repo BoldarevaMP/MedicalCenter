@@ -18,6 +18,10 @@ import java.util.List;
 
 import static unicorn.converter.PageableConverter.convertToPageable;
 
+/**
+ * Process requests related with events
+ */
+
 @Controller
 @RequestMapping(value = "/event")
 public class EventController {
@@ -28,41 +32,88 @@ public class EventController {
     @Autowired
     private EventValidator eventValidator;
 
-    @RequestMapping(value = {"/list/all"}, method = RequestMethod.GET)
+    /**
+     * Displays events list
+     *
+     * @param request - object for providing request information for HTTP servlets
+     * @param model   - model for view
+     * @return page with events list
+     */
+
+    @GetMapping(value = {"/list/all"})
     public String listEvents(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getAll();
         model.addAttribute("events", convertToPageable(request, events));
         return "eventList";
     }
 
-    @RequestMapping(value = {"/list/today"}, method = RequestMethod.GET)
+    /**
+     * Displays today events list
+     *
+     * @param request - object for providing request information for HTTP servlets
+     * @param model   - model for view
+     * @return page with today events list
+     */
+
+    @GetMapping(value = {"/list/today"})
     public String listEventsToday(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getEventsByDateToday();
         model.addAttribute("events", convertToPageable(request, events));
         return "eventListToday";
     }
 
-    @RequestMapping(value = {"/list/hour"}, method = RequestMethod.GET)
+    /**
+     * Displays this hour events list
+     *
+     * @param request - object for providing request information for HTTP servlets
+     * @param model   - model for view
+     * @return page with this hour events list
+     */
+
+    @GetMapping(value = {"/list/hour"})
     public String listEventsThisHour(HttpServletRequest request, ModelMap model) {
         List<EventDTO> events = eventService.getEventsByDateHour();
         model.addAttribute("events", convertToPageable(request, events));
         return "eventListThisHour";
     }
 
-    @RequestMapping(value = {"/patient-name"}, method = RequestMethod.GET)
+    /**
+     * Displays patients list
+     *
+     * @param model    - model for view
+     * @param lastName - patients' last name
+     * @return page with patients list
+     */
+
+    @GetMapping(value = {"/patient-name"})
     public String listPatientByLastName(ModelMap model, @RequestParam String lastName) {
         model.addAttribute("patients", eventService.getPatientsByLastName(lastName));
         return "patientByName";
 
     }
 
-    @RequestMapping(value = {"/getPatientsByName"}, method = RequestMethod.GET)
+    /**
+     * Provides list of patients
+     *
+     * @param name - patients' last name
+     * @return list of patients
+     */
+
+    @GetMapping(value = {"/getPatientsByName"})
     public @ResponseBody
     List<PatientDTO> getPatients(@RequestParam String name) {
         return eventService.getPatientsByLikeName(name);
     }
 
-    @RequestMapping(value = {"/patient-{id}"}, method = RequestMethod.GET)
+    /**
+     * Displays events list of concrete patient
+     *
+     * @param model - model for view
+     * @param id    - patient id
+     * @return - page with events list of concrete patient
+     */
+
+    @GetMapping(value = {"/patient-{id}"})
     public String listEventsPatient(ModelMap model, @PathVariable Integer id) {
         List<EventDTO> events = eventService.getEventsByPatientId(id);
         model.addAttribute("events", events);
@@ -70,7 +121,15 @@ public class EventController {
 
     }
 
-    @RequestMapping(value = {"/edit-event-{id}"}, method = RequestMethod.GET)
+    /**
+     * Gets event data from DB and displays form for editing
+     *
+     * @param id    - id of editing appointment
+     * @param model - model for view
+     * @return page for event editing
+     */
+
+    @GetMapping(value = {"/edit-event-{id}"})
     public String editEvent(@PathVariable Integer id, ModelMap model) {
         if (!model.containsAttribute("event")) {
             EventDTO eventDTO = eventService.getByID(id);
@@ -80,12 +139,21 @@ public class EventController {
         return "event";
     }
 
-    @RequestMapping(value = {"/edit-event-{id}"}, method = RequestMethod.POST)
-    public String updateEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult result, ModelMap model,
+    /**
+     * Updates event data
+     *
+     * @param eventDTO           - data for updating
+     * @param bindingResult      - object for keeping errors
+     * @param redirectAttributes - attribute for redirect to concrete page
+     * @return url for redirect to event list
+     */
+
+    @PostMapping(value = {"/edit-event-{id}"})
+    public String updateEvent(@Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
-        eventValidator.validate(eventDTO, result);
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", result);
+        eventValidator.validate(eventDTO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.event", bindingResult);
             redirectAttributes.addFlashAttribute("event", eventDTO);
             redirectAttributes.addAttribute("id", eventDTO.getId());
             return "redirect:/event/edit-event-{id}";

@@ -1,9 +1,9 @@
-<%@ tag language="java" pageEncoding="ISO-8859-1"%>
-<%@ tag import="org.springframework.util.StringUtils"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ tag language="java" pageEncoding="ISO-8859-1" %>
+<%@ tag import="org.springframework.util.StringUtils" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ attribute name="pagedListHolder" required="true"
-              type="org.springframework.beans.support.PagedListHolder"%>
-<%@ attribute name="pagedLink" required="true" type="java.lang.String"%>
+              type="org.springframework.beans.support.PagedListHolder" %>
+<%@ attribute name="pagedLink" required="true" type="java.lang.String" %>
 <link rel="stylesheet"
       href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script
@@ -15,7 +15,8 @@
     <ul class="pagination">
         <c:if test="${!pagedListHolder.firstPage}">
             <li class="previous"><a
-                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPage() - 1))%>"><</a></li>
+                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPage() - 1))%>"><</a>
+            </li>
         </c:if>
         <c:if test="${pagedListHolder.firstLinkedPage > 0}">
             <li><a href="<%=StringUtils.replace(pagedLink, "ptag", "0")%>">1</a></li>
@@ -44,11 +45,13 @@
         <c:if
                 test="${pagedListHolder.lastLinkedPage < pagedListHolder.pageCount - 1}">
             <li><a
-                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPageCount() - 1))%>">${pagedListHolder.pageCount}</a></li>
+                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPageCount() - 1))%>">${pagedListHolder.pageCount}</a>
+            </li>
         </c:if>
         <c:if test="${!pagedListHolder.lastPage}">
             <li class="next"><a
-                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPage() + 1))%>">></a></li>
+                    href="<%=StringUtils.replace(pagedLink, "ptag", String.valueOf(pagedListHolder.getPage() + 1))%>">></a>
+            </li>
         </c:if>
     </ul>
 </c:if>

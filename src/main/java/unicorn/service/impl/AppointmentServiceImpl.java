@@ -34,6 +34,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of service for appointment handling
+ */
+
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
@@ -61,6 +65,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private MessageSender messageSender;
 
+    /**
+     * Creates appointment and events, that are connected with it.
+     *
+     * @param appointmentDTO - data for saving
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void create(AppointmentDTO appointmentDTO) {
@@ -80,6 +89,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         messageSender.send(UPDATE);
         logger.info("Appointment is created.");
     }
+
+    /**
+     * Updates appointment, cancels current events with comments “by Doctor” and creats new events.
+     *
+     * @param appointmentDTO - data for updating
+     */
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -101,6 +116,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         logger.info("Appointment is updated.");
     }
 
+    /**
+     * Changes appointment status from "ACTIVE" to "CANCELLED"
+     *
+     * @param id - id of editing appointment
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void changeStatusToCancelledById(Integer id) {
@@ -134,11 +154,18 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<TreatmentDTO> getAllTreatments() {
+        List<Treatment> treatmentList = treatmentDAO.getAll();
+        return treatmentList.stream().map(treatment -> mapper.map(treatment, TreatmentDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public List<LocalDate> getDatesBetweenStartAndEnd(LocalDate startDate, LocalDate endDate, List<DaysOfWeek> days) {
 
         int daysInWeek = 7;
 
-        List<LocalDate> daysInRange = new ArrayList<LocalDate>();
+        List<LocalDate> daysInRange = new ArrayList<>();
 
         DayOfWeek dowOfStart = startDate.getDayOfWeek();
 
@@ -205,6 +232,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     private List<Event> createEventsOfAppointment(List<LocalDateTime> datesWithTime, Appointment appointment) {
         List<Event> eventList = new ArrayList<>();
         for (int i = 0; i < datesWithTime.size(); i++) {
+            if(datesWithTime.get(i).isBefore(LocalDateTime.now())){
+                continue;
+            }
             Event event = new Event();
             event.setDate(datesWithTime.get(i));
             event.setStatus(EventStatus.PLANNED);

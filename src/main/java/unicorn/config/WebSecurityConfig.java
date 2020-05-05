@@ -59,18 +59,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        String loginPage = "/login";
         http.authorizeRequests()
-                .antMatchers("/login", "/registration").permitAll()
+                .antMatchers(loginPage, "/registration").permitAll()
                 .antMatchers("/event/**").hasRole("NURSE")
                 .antMatchers("/patient/**").hasRole("DOCTOR")
                 .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login")
+                .formLogin().loginPage(loginPage).loginProcessingUrl(loginPage)
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler)
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/login").permitAll()
+                .logout().logoutSuccessUrl(loginPage).permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
                 .and()

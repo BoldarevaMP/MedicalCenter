@@ -32,7 +32,7 @@ public class TreatmentDAOImpl extends GenericDAOImpl<Treatment> implements Treat
         if (name != null) {
             criteriaQuery.where(entityManager.getCriteriaBuilder().like(treatmentRoot.get("name"), "%" + name + "%"));
         }
-        List<Treatment> list = entityManager.createQuery(criteriaQuery).getResultList();
-        return list;
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 }

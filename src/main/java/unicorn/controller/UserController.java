@@ -7,9 +7,9 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import unicorn.dto.UserDTO;
 import unicorn.service.api.UserService;
 import unicorn.validator.UserValidator;
@@ -17,6 +17,10 @@ import unicorn.validator.UserValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+/**
+ * Process requests related with users
+ */
 
 @Controller
 public class UserController {
@@ -27,13 +31,28 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    /**
+     * Displays form for user registration
+     *
+     * @param model - model for viewing
+     * @return page with form for registration
+     */
+
+    @GetMapping(value = "/registration")
     public String createModel(Model model) {
         model.addAttribute("userForm", new UserDTO());
         return "registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    /**
+     * Saves user data
+     *
+     * @param userForm      - data for saving
+     * @param bindingResult - object for keeping errors
+     * @return page for authorization
+     */
+
+    @PostMapping(value = "/registration")
     public String registration(@Valid @ModelAttribute("userForm") UserDTO userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
 
@@ -44,7 +63,16 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    /**
+     * Displays form for authorization
+     *
+     * @param model  - model for viewing
+     * @param error
+     * @param logout
+     * @return page for authorization
+     */
+
+    @GetMapping(value = "/login")
     public String login(Model model, String error, String logout) {
         if (error != null) {
             model.addAttribute("error", "Email or password is incorrect.");
@@ -55,7 +83,15 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    /**
+     * logs out for user
+     *
+     * @param request  - object for providing request information for HTTP servlets
+     * @param response - object for providing HTTP-specific functionality in sending a response
+     * @return url for redirecting to authorization page
+     */
+
+    @GetMapping(value = "/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
@@ -64,8 +100,14 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public String welcome(Model model) {
+    /**
+     * Displays 403 error
+     *
+     * @return page with 403 error
+     */
+
+    @GetMapping(value = "/403")
+    public String renderErrorPage() {
         return "error/403";
     }
 }

@@ -28,6 +28,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of service for patient handling
+ */
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -106,7 +109,7 @@ public class PatientServiceImpl implements PatientService {
         boolean isTreated = false;
         for (int i = 0; i < appointmentList.size(); i++) {
             List<Event> eventListPlanned = eventDAO.getPlannedEventsByAppointmentId(appointmentList.get(i).getId());
-            if (eventListPlanned.size() != 0) {
+            if (!eventListPlanned.isEmpty()) {
                 isTreated = true;
                 break;
             }

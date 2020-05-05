@@ -8,10 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import unicorn.dao.api.UserDAO;
+import unicorn.dto.TreatmentDTO;
 import unicorn.dto.UserDTO;
+import unicorn.entity.Treatment;
 import unicorn.entity.User;
 import unicorn.entity.enums.Role;
 import unicorn.service.api.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Implementation of service for user handling
+ */
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -49,6 +58,12 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<UserDTO> getAll() {
+        List<User> userList = userDAO.getAll();
+        return userList.stream().map(user -> mapper.map(user, UserDTO.class)).collect(Collectors.toList());
     }
 
     public void setMapper(ModelMapper mapper) {

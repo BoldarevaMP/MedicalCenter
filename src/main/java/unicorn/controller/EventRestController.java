@@ -10,6 +10,10 @@ import unicorn.service.api.EventService;
 
 import java.util.List;
 
+/**
+ * Process requests related with web service
+ */
+
 @RestController
 @RequestMapping(value = "/rest")
 public class EventRestController {
@@ -18,6 +22,12 @@ public class EventRestController {
 
     @Autowired
     private EventService eventService;
+
+    /**
+     * Provides list of today events
+     *
+     * @return list of today events
+     */
 
     @GetMapping(value = "/events-today")
     public List<EventRestDTO> getEventsRestToday() {

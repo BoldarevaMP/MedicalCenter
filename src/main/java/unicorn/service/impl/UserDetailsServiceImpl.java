@@ -12,10 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import unicorn.dao.api.UserDAO;
 import unicorn.dto.UserDTO;
 import unicorn.entity.User;
-import unicorn.service.api.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
+
+/**
+ * Implementation of {@link org.springframework.security.core.userdetails.UserDetailsService} interface.
+ *
+ */
 
 @Service(value = "userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -6,14 +6,24 @@
 <html>
 <head>
     <title>Edit Appointment</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
     <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
 </head>
 <body>
-<div class="well">
-    <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+<div class="generic-container">
+    <sec:authorize access="hasRole('ROLE_DOCTOR')">
+        <h4 style="text-align: right;">Doctor ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_NURSE')">
+        <h4 style="text-align: right;">Nurse ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container ">
@@ -41,7 +51,8 @@
             <div class="form-group col-md-12">
                 <div class="col-md-6">
                     <span>Treatment Name</span>
-                    <form:input  type="text" id="treatmentDTO.name" path="treatmentDTO.name" class="TreatmentName form-control"/>
+                    <form:input type="text" id="treatmentDTO.name" path="treatmentDTO.name"
+                                class="TreatmentName form-control"/>
                     <div class="has-error">
                         <form:errors path="treatmentDTO.name" class="help-inline"/>
                     </div>
@@ -49,7 +60,7 @@
 
                 <div class="col-md-6">
                     <span>Dosage</span>
-                    <form:input  type="number" id="dosage" path="dosage" class="form-control"/>
+                    <form:input type="number" id="dosage" path="dosage" class="form-control"/>
                     <div class="has-error">
                         <form:errors path="dosage" class="help-inline"/>
                     </div>
@@ -93,14 +104,14 @@
                 </div>
                 <div class="col-md-3">
                     <c:choose>
-                    <c:when test="${edit}">
-                        <h4>Current Days Pattern:
-                            </br>
-                            <c:forEach items="${appointment.days}" var="day">
-                                ${day}
-                            </c:forEach>
-                        </h4>
-                    </c:when>
+                        <c:when test="${edit}">
+                            <h4>Current Days Pattern:
+                                </br>
+                                <c:forEach items="${appointment.days}" var="day">
+                                    ${day}
+                                </c:forEach>
+                            </h4>
+                        </c:when>
                     </c:choose>
                 </div>
                 <div class="col-md-3">
@@ -154,14 +165,17 @@
             <div class="form-actions floatLeft">
                 <c:choose>
                     <c:when test="${edit}">
-                        <button id="button" class="btn btn-success" type="submit" onclick="checkConfirmForm(event)">Update Appointment</button>
+                        <button id="button" class="btn btn-success" type="submit" onclick="checkConfirmForm(event)">
+                            Update Appointment
+                        </button>
                     </c:when>
                     <c:otherwise>
                         <button id="button" class="btn btn-success" type="submit">Add Appointment</button>
                     </c:otherwise>
                 </c:choose>
 
-                <button class="btn btn-warning"><a href="<c:url value='/patient/edit-patient-${appointment.patientDTO.id}'/>">Cancel</a></button>
+                <button class="btn btn-warning"><a
+                        href="<c:url value='/patient/edit-patient-${appointment.patientDTO.id}'/>">Cancel</a></button>
             </div>
         </div>
     </form:form>
@@ -180,7 +194,7 @@
                     url: "/unicorn/getTreatmentByName",
                     data: {name: $('.TreatmentName').val()},
                     success: function (data) {
-                        resp($.map(data, function(v,i){
+                        resp($.map(data, function (v, i) {
                             return v.name;
                         }));
                     }
@@ -190,7 +204,7 @@
     })
 </script>
 <script type="text/javascript">
-    function checkConfirmForm (e) {
+    function checkConfirmForm(e) {
         e.preventDefault();
         swal({
             title: "Are you sure?",

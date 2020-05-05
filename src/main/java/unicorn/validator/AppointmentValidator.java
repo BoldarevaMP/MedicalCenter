@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import unicorn.dto.AppointmentDTO;
+import unicorn.dto.TreatmentDTO;
 import unicorn.entity.enums.TreatmentType;
 import unicorn.service.api.AppointmentService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -54,27 +54,33 @@ public class AppointmentValidator implements Validator {
 
         if (appointmentDTO.getTreatmentDtoName() == null || appointmentDTO.getTreatmentDtoName().equals("")) {
             errors.rejectValue("treatmentDTO.name", "Check.appointment.treatmentDTO.name");
-        }
-
-        if (appointmentDTO.getDays().size() <= 0) {
-            errors.rejectValue("days", "Check.appointment.days");
-        }
-
-        if (appointmentDTO.getStartDate() != null && appointmentDTO.getEndDate() != null && appointmentDTO.getDays().size()>0){
-            List<LocalDate> localDates = appointmentService.getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(),
-                    appointmentDTO.getEndDate(), appointmentDTO.getDays());
-            if (localDates.isEmpty()){
-                errors.rejectValue("days", "CheckPattern.appointment.days");
+        } else {
+            List<TreatmentDTO> treatmentDTOList = appointmentService.getAllTreatments();
+            boolean isValid = false;
+            for (TreatmentDTO treatmentDTO : treatmentDTOList) {
+                if (appointmentDTO.getTreatmentDtoName().equals(treatmentDTO.getName())) {
+                    isValid = true;
+                    break;
+                }
+            }
+            if (!isValid) {
+                errors.rejectValue("treatmentDTO.name", "Verify.appointment.treatmentDTO.name");
             }
         }
 
-        if (appointmentDTO.getTime().size() <= 0) {
-            errors.rejectValue("time", "Check.appointment.time");
+        if (appointmentDTO.getDays().isEmpty()) {
+            errors.rejectValue("days", "Check.appointment.days");
         }
 
-//        if (appointmentDTO.getEndDate() appointmentDTO.getStartDate() == ){
-//            errors.rejectValue("startDate", "Check.appointment.startDate");
-//        }
-
+        if (appointmentDTO.getStartDate() != null && appointmentDTO.getEndDate() != null && !appointmentDTO.getDays().isEmpty()) {
+            List<LocalDate> localDates = appointmentService.getDatesBetweenStartAndEnd(appointmentDTO.getStartDate(),
+                    appointmentDTO.getEndDate(), appointmentDTO.getDays());
+            if (localDates.isEmpty()) {
+                errors.rejectValue("days", "CheckPattern.appointment.days");
+            }
+        }
+        if (appointmentDTO.getTime().isEmpty()) {
+            errors.rejectValue("time", "Check.appointment.time");
+        }
     }
 }

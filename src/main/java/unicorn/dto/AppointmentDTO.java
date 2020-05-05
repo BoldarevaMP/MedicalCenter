@@ -14,6 +14,10 @@ import javax.persistence.TemporalType;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Appointment DTO class
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

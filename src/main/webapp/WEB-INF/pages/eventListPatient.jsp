@@ -12,14 +12,24 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Events List</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet">
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet">
 </head>
 
 <body>
-<div class="well-sm">
-    <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+<div class="generic-container">
+    <sec:authorize access="hasRole('ROLE_DOCTOR')">
+        <h4 style="text-align: right;">Doctor ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_NURSE')">
+        <h4 style="text-align: right;">Nurse ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container">
@@ -55,7 +65,8 @@
                     <td>
                         <c:choose>
                             <c:when test="${event.status =='PLANNED'}">
-                                <a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a>
+                                <a href="<c:url value="/event/edit-event-${event.id}" />"
+                                   class=" btn btn-success custom-width">edit</a>
                             </c:when>
                         </c:choose>
                     </td>

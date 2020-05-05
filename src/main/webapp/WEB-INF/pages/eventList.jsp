@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="tg" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="tg" tagdir="/WEB-INF/tags" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -10,15 +10,25 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Events List</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet">
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet">
-    <link  href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
 </head>
 
 <body>
-<div class="well">
-    <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name}  <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+<div class="generic-container">
+    <sec:authorize access="hasRole('ROLE_DOCTOR')">
+        <h4 style="text-align: right;">Doctor ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_NURSE')">
+        <h4 style="text-align: right;">Nurse ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container">
@@ -29,8 +39,8 @@
     </div>
     <div class="panel panel-default">
         <form method="GET" action="${contextPath}/event/patient-name" class="form--horizontal   ">
-        <div class="well">
-            <table>
+            <div class="well">
+                <table>
                     <tr>
                         <td width="200">
                             <input name="lastName" class="LastName form-control " placeHolder="Patient Last Name"/>
@@ -40,18 +50,18 @@
                             <button id="button" class="btn btn-primary" type="submit">Search</button>
                         </td>
                     </tr>
-            </table>
-        </div>
+                </table>
+            </div>
         </form>
 
         <!-- Default panel contents -->
         <div class="panel-heading"><span class="lead">List of Events</span></div>
-        <jsp:useBean id="events" scope="request" type="org.springframework.beans.support.PagedListHolder" />
+        <jsp:useBean id="events" scope="request" type="org.springframework.beans.support.PagedListHolder"/>
         <c:url value="/event/list/all" var="pagedLink">
             <c:param name="p" value="ptag"/>
         </c:url>
         <div style="margin-left: 20px">
-        <tg:paging pagedListHolder="${events}" pagedLink="${pagedLink}" />
+            <tg:paging pagedListHolder="${events}" pagedLink="${pagedLink}"/>
         </div>
         <table class="table table-hover">
             <thead>
@@ -75,11 +85,11 @@
                     <td>${event.status}</td>
                     <td>${event.comment}</td>
                     <td>
-                    <c:choose>
+                        <c:choose>
                         <c:when test="${event.status =='PLANNED'}">
                         <a href="<c:url value="/event/edit-event-${event.id}" />" class=" btn btn-success custom-width">edit</a>
                         </c:when>
-                    </c:choose>
+                        </c:choose>
                 </tr>
             </c:forEach>
             </tbody>
@@ -100,7 +110,7 @@
                     url: "/unicorn/event/getPatientsByName",
                     data: {name: $('.LastName').val()},
                     success: function (data) {
-                        resp($.map(data, function(v,i){
+                        resp($.map(data, function (v, i) {
                             return v.lastName;
                         }));
                     }

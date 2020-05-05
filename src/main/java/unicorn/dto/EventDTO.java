@@ -8,6 +8,10 @@ import unicorn.entity.enums.EventStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * Event DTO class
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

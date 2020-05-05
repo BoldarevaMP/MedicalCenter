@@ -33,7 +33,6 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     }
 
     @Override
-
     public List<Event> getEventsByPatientId(Integer patId) {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events JOIN appointments a\n" +
                 "ON events.appointment_id = a.id\n" +
@@ -45,13 +44,13 @@ public class EventDAOImpl extends GenericDAOImpl<Event> implements EventDAO {
     public List<Event> getAllSorted() {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events ORDER BY date", Event.class)
                 .getResultList();
-        return list;
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 
     @Override
     public List<Event> getPlannedEventsByAppointmentId(Integer id) {
         List<Event> list = entityManager.createNativeQuery("SELECT * FROM events WHERE appointment_id = :id " +
                 "AND status LIKE 'PLANNED'", Event.class).setParameter("id", id).getResultList();
-        return list;
+        return list.isEmpty() ? new ArrayList<>() : list;
     }
 }

@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * Event Rest DTO class
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

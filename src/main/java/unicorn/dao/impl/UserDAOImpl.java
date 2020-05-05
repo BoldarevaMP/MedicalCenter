@@ -15,18 +15,18 @@ import java.util.List;
 public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private EntityManager manager;
 
     @Override
     public User getUserByEmail(String email) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
 
         if (email != null) {
-            criteriaQuery.where(entityManager.getCriteriaBuilder().equal(userRoot.get("email"), email));
+            criteriaQuery.where(manager.getCriteriaBuilder().equal(userRoot.get("email"), email));
         }
-        List<User> list = entityManager.createQuery(criteriaQuery).getResultList();
+        List<User> list = manager.createQuery(criteriaQuery).getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
 }

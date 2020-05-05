@@ -20,5 +20,7 @@ public interface AppointmentService {
 
     List<TreatmentDTO> getTreatmentByLikeNames(String name);
 
+    List<TreatmentDTO> getAllTreatments();
+
     List<LocalDate> getDatesBetweenStartAndEnd(LocalDate startDate, LocalDate endDate, List<DaysOfWeek> days);
 }

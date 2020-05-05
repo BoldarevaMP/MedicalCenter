@@ -13,10 +13,15 @@
     <meta name="author" content="">
 
     <title>Log in with your account</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css" >
+    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -35,7 +40,7 @@
             <span>${error}</span>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
-            <h4 class="text-center"><a href="${contextPath}/registration">Sign Up</a></h4>
+            <h3 class="text-center"><a href="${contextPath}/registration">Sign Up</a></h3>
         </div>
 
     </form>

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import unicorn.dao.api.EventDAO;
@@ -22,13 +21,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static app.tests.DataInit.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class EventServiceTest {
 
     @Mock
@@ -51,7 +48,15 @@ public class EventServiceTest {
 
     @Before
     public void setUp() {
-        DataInit.setUp();
+        DataInit.setUpTreatmentDTO();
+        DataInit.setUpTreatment();
+        DataInit.setUpPatientDTO();
+        DataInit.setUpPatient();
+        DataInit.setUpAppointmentDTO();
+        DataInit.setUpAppointment();
+        DataInit.setUpEvent();
+        DataInit.setUpEventDTO();
+        DataInit.setUpEventRestDTO();
         eventService.setMapper(mapper);
     }
 
@@ -59,11 +64,7 @@ public class EventServiceTest {
     public void testUpdateEventStatusToDone() {
         when(eventDAO.getById(eventDTO.getId())).thenReturn(event);
         when(patientDAO.getById(event.getPatientId())).thenReturn(patient);
-        doNothing().when(Mockito.spy(eventDAO)).update(event);
-        doNothing().when(Mockito.spy(patientService)).changePatientStatusToDischarge(patient);
-        doNothing().when(Mockito.spy(messageSender)).send(anyString());
         eventService.updateStatusAndComment(eventDTO);
-
         assertEquals(EventStatus.DONE, event.getStatus());
     }
 
@@ -82,7 +83,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void testGetEventsByDateTodayAfterNow(){
+    public void testGetEventsByDateTodayAfterNow() {
         when(eventDAO.getEventsByDateTodayAfterNow()).thenReturn(Stream.of(event).collect(Collectors.toList()));
         List<EventRestDTO> eventRestDTOList = eventService.getEventsByDateTodayAfterNow();
         assertEquals(eventRestDTO.getId(), eventRestDTOList.get(0).getId());

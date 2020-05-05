@@ -6,9 +6,14 @@ import org.hibernate.validator.constraints.NotBlank;
 import unicorn.entity.enums.TreatmentDosageForm;
 import unicorn.entity.enums.TreatmentType;
 
+/**
+ * Treatment DTO class
+ */
+
 @Data
 @NoArgsConstructor
 public class TreatmentDTO {
+
     private Integer id;
 
     @NotBlank

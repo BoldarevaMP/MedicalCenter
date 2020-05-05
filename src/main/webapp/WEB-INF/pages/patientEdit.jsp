@@ -6,15 +6,24 @@
 <html>
 <head>
     <title>Edit Patient</title>
+    <style>
+        body {
+            background-image: url("${contextPath}/resources/images/11.jpg");
+        }
+    </style>
     <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
     <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
 
 </head>
 <body>
-<div class="well-sm">
-    <sec:authorize access="hasRole('ROLE_NURSE') or hasRole('ROLE_DOCTOR')">
-        <h4 style="display: inline-block; padding-left: 950px">Hi ${pageContext.request.userPrincipal.name} <a
-                href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+<div class="generic-container">
+    <sec:authorize access="hasRole('ROLE_DOCTOR')">
+        <h4 style="text-align: right;">Doctor ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_NURSE')">
+        <h4 style="text-align: right;">Nurse ${pageContext.request.userPrincipal.name}
+            <a href="<c:url value="/logout"/>" class="btn btn-danger custom-width">Sign Out</a></h4>
     </sec:authorize>
 </div>
 <div class="generic-container ">
@@ -75,7 +84,8 @@
                 <td>
                     <form id="DeleteForm${appointment.id}" onclick="checkConfirmForm(${appointment.id},event)"
                           action="${contextPath}/patient/delete-appointment-${appointment.id}">
-                    <a href="<c:url value="/patient/delete-appointment-${appointment.id}"/>" type="submit" class="btn btn-danger custom-width">delete</a>
+                        <a href="<c:url value="/patient/delete-appointment-${appointment.id}"/>" type="submit"
+                           class="btn btn-danger custom-width">delete</a>
                     </form>
                 </td>
             </tr>
@@ -87,7 +97,7 @@
 <script type="text/javascript" src="${contextPath}/resources/js/sweetalert.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resources/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    function checkConfirmForm (id,e) {
+    function checkConfirmForm(id, e) {
         e.preventDefault();
         swal({
             title: "Are you sure?",
@@ -104,7 +114,7 @@
                     title: 'Deleted!',
                     icon: 'success'
                 });
-                $('#DeleteForm'+id).submit();
+                $('#DeleteForm' + id).submit();
             } else {
                 swal("Cancelled", "", "error");
             }

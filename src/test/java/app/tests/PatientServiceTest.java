@@ -16,7 +16,6 @@ import unicorn.dao.api.EventDAO;
 import unicorn.dao.api.PatientDAO;
 import unicorn.dto.AppointmentDTO;
 import unicorn.dto.PatientDTO;
-import unicorn.entity.Patient;
 import unicorn.entity.enums.PatientStatus;
 import unicorn.service.api.UserService;
 import unicorn.service.impl.PatientServiceImpl;
@@ -28,10 +27,9 @@ import java.util.stream.Stream;
 import static app.tests.DataInit.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PatientServiceTest {
 
     @Mock
@@ -55,7 +53,14 @@ public class PatientServiceTest {
 
     @Before
     public void setUp() {
-        DataInit.setUp();
+        DataInit.setUpUserDTODoctor();
+        DataInit.setUpUserDoctor();
+        DataInit.setUpPatient();
+        DataInit.setUpPatientDTO();
+        DataInit.setUpTreatment();
+        DataInit.setUpTreatmentDTO();
+        DataInit.setUpAppointmentDTO();
+        DataInit.setUpAppointment();
         patientService.setMapper(mapper);
     }
 
@@ -66,42 +71,37 @@ public class PatientServiceTest {
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
-        when(authentication.getName()).thenReturn(userDTO.getEmail());
-        when(userService.getUserByEmail(userDTO.getEmail())).thenReturn(userDTO);
-        doNothing().when(Mockito.spy(patientDAO)).create(patient);
+        when(authentication.getName()).thenReturn(userDTODoctor.getEmail());
+        when(userService.getUserByEmail(userDTODoctor.getEmail())).thenReturn(userDTODoctor);
         PatientDTO patientDtoTest = patientService.create(patientDTO);
         assertNotNull(patientDtoTest);
-        assertEquals(patientDTO.getId(),patientDtoTest.getId());
     }
 
     @Test
-    public void testGetAllPatients(){
+    public void testGetAllPatients() {
         when(patientDAO.getAllSorted()).thenReturn(Stream.of(patient).collect(Collectors.toList()));
         List<PatientDTO> patientDTOList = patientService.getAll();
         assertEquals(patientDTO.getId(), patientDTOList.get(0).getId());
     }
 
     @Test
-    public void testGetPatientById(){
+    public void testGetPatientById() {
         when(patientDAO.getById(patient.getId())).thenReturn(patient);
         assertEquals(patientService.getById(patient.getId()).getId(), patientDTO.getId());
     }
 
     @Test
-    public void testGetAppointmentsByPatientId(){
+    public void testGetAppointmentsByPatientId() {
         when(appointmentDAO.getByPatientId(patient.getId())).thenReturn(Stream.of(appointment).collect(Collectors.toList()));
         List<AppointmentDTO> appointmentDTOList = patientService.getAppointmentsByPatientId(patient.getId());
         assertEquals(appointmentDTO.getId(), appointmentDTOList.get(0).getId());
     }
 
     @Test
-    public void testChangePatientStatusToDischarge(){
+    public void testChangePatientStatusToDischarge() {
         when(appointmentDAO.getByPatientId(patient.getId())).thenReturn(Stream.of(appointment).collect(Collectors.toList()));
         patientService.changePatientStatusToDischarge(patient);
-        when(eventDAO.getPlannedEventsByAppointmentId(appointment.getId()))
-                .thenReturn(Stream.of(event).collect(Collectors.toList()));
         assertEquals(PatientStatus.DISCHARGED, patient.getStatus());
-
     }
 
 }

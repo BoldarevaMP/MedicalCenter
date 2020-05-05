@@ -191,11 +191,11 @@
         <sonar.language>java</sonar.language>
         <sonar.coverage.exclusions>
             **/unicorn/config/*,
-            **/unicorn/controller/*,
             **/unicorn/entity/**,
             **/unicorn/exception/*,
             **/unicorn/dao/**,
-            **/unicorn/dto/*
+            **/unicorn/dto/*,
+            **/unicorn/validator/*
         </sonar.coverage.exclusions>
     </properties>
 

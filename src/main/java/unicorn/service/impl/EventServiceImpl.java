@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of service for event handling
+ */
+
 @Service
 public class EventServiceImpl implements EventService {
 
@@ -41,6 +45,12 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private MessageSender messageSender;
+
+    /**
+     * Updates event status and adds comment
+     *
+     * @param eventDTO - data for saving
+     */
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
